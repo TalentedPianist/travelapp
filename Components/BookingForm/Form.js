@@ -1,47 +1,46 @@
-import React from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import styled from 'styled-components';
-
-const InputText = styled.TextInput`
-    border: 1px solid black;
-    padding: 5px 5px 5px 5px;
-    width: 90%;
-    display: flex; 
-    margin: 0 auto;
-
-  
-`;
-
+import React, { useState } from 'react';
+import { View, Keyboard, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 
 
 export default function BookingForm() {
-    const { control, handleSubmit } = useForm();
+    const [city, setCity] = useState("");
 
-    const onSubmit = (data) => { 
+    const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
-        <>
-            <View>
-                <Controller 
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <InputText 
-                            onBlur={onBlur} 
-                            onChangeText={onChange}
-                            value={value}
-                            placeholder="City"
-                            
-                        />
-                    )}
-                    name="City"
-                    rules={{ required: true }}
-                    defaultValue=""
-                />
-            </View>
-            );
-        </>
-    )
+
+        <View style={styles.container}>
+            <TextInput
+                label="City"
+                value={city}
+                onChangeText={(city) => setCity(city)}
+                mode="outlined"
+                style={styles.input}
+            />
+
+            <Button
+                mode="contained"
+                onPress={() => console.log(city)}>
+                Submit
+            </Button>
+        </View>
+
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 20,
+        justifyContent: 'center',
+    },
+    input: {
+        marginBottom: 20,
+        backgroundColor: 'white',
+    },
+    button: {
+        alignSelf: 'center'
+    }
+});
