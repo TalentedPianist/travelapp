@@ -1,12 +1,17 @@
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { TextInput } from 'react-native-paper';
-import { FormProvider, useForm } from 'react-hook-form';
-
+import { useForm, Controller } from 'react-hook-form';
+import { Button, TextInput } from 'react-native-paper';
+import { FormBuilder } from './dist';
 
 // https://medium.com/@abdurshd/a-step-by-step-guide-to-building-reusable-components-with-react-hook-form-70f5e77c9037
 export default function Register() { 
-    const methods = useForm();
-    const { handleSubmit } = methods;
+    const { control, setFocus, handleSubmit} = useForm({ 
+        defaultValues: { 
+            email: '',
+            password: '',
+        },
+        mode: 'onChange',
+    });
 
     const onSubmit = data => { 
         console.log(data);
@@ -16,6 +21,9 @@ export default function Register() {
         <>
             <View style={styles.registerContainer}>
                 <Text style={styles.textStyles}>Sign up for your new account</Text>
+
+                <FormBuilder
+                    
 
             </View>
         </>
