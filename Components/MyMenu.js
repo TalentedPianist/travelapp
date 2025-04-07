@@ -5,7 +5,7 @@ import { createStaticNavigation, useNavigationContainerRef, createNavigationCont
 import { Tabs, router, Link } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createStackNavigator, createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../home';
+import HomeScreen from '../Home';
 import About from '../Components/About';
 
 const MenuIcon = () => {

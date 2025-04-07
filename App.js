@@ -8,9 +8,9 @@ import MyMenu from './Components/MyMenu'; // This was set wrong, causing all the
 import { Provider as PaperProvider, Menu } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import HomeScreen from './home';
-import AboutScreen from './about';
-import Register from './register';
+import HomeScreen from './Home';
+import AboutScreen from './About';
+import Register from './Register';
 
 const Header = styled.View`
   display: flex; 
