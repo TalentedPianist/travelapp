@@ -60,8 +60,8 @@ export default function MyMenu() {
                                 <TouchableOpacity onPress={() => navigate('about')}>
                                     <Text style={styles.modalText }>About</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigate('register')}>
-                                    <Text style={styles.modalText }>Register</Text>
+                                <TouchableOpacity onPress={() => navigate('login')}>
+                                    <Text style={styles.modalText }>Login</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

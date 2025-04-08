@@ -11,6 +11,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import HomeScreen from './Home';
 import AboutScreen from './About';
 import Register from './Register';
+import LoginScreen from './Login';
 
 const Header = styled.View`
   display: flex; 
@@ -103,8 +104,8 @@ function MyStack() {
         component={AboutScreen} 
       />
       <Stack.Screen
-        name="register"
-        component={Register}
+        name="login"
+        component={LoginScreen}
       />
     </Stack.Navigator>
   );
