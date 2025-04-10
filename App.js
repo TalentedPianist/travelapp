@@ -1,9 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { createStaticNavigation, NavigationIndependentTree } from '@react-navigation/native';
+import {  NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import MyMenu from './app/MyMenu';
-import { PaperProvider } from 'react-native-paper';
+import MyMenu from './MyMenu';
+import { useRef } from 'react';
+import AboutUs from './Components/AboutUs';
+import Login from './Components/Login';
+import GoogleAuth from './Components/GoogleAuth';
 
 function HomeScreen() { 
     return(
@@ -15,39 +18,73 @@ function HomeScreen() {
 
 function AboutScreen() { 
     return(
-        <View>
-            <Text>About Screen</Text>
-        </View>
+        <AboutUs />
     );
 }
 
-const RootStack = createNativeStackNavigator({ 
-    initialRouteName: 'Home',
-    screenOptions: { 
-        header: () => (
-            <View style={styles.headerStyles}>
-                <FontAwesome5 name="home" size={70} color="black" />
-                <MyMenu />
-            </View>
-        ),
-        headerStyle: { backgroundColor: 'lightblue' },
-    },
-    screens: { 
-        Home: HomeScreen,
-        About: AboutScreen,
-    },
-});
-
-const Navigation = createStaticNavigation(RootStack);
-
-export default function App() {
+function LoginScreen() { 
     return (
         <>
-            <NavigationIndependentTree>
-            <PaperProvider>
-                <Navigation/>
-            </PaperProvider>
-            </NavigationIndependentTree>
+            <View>
+                <GoogleAuth />
+            </View>
+        </>
+    );
+}
+
+const Stack = createNativeStackNavigator();
+
+function RootStack() { 
+
+
+    return (
+        <>
+        <Stack.Navigator initialRouteName="Home"
+            screenOptions={{
+                header: () => (
+                    <View style={styles.headerStyles}>
+                        <FontAwesome5 name="home" size={70} color="black" />
+                        <MyMenu />
+                    </View>
+                )
+            }}
+        >
+            <Stack.Screen 
+                name="Home" 
+                component={HomeScreen} 
+                options={{ title: 'overview' }}
+                />
+            <Stack.Screen
+                name="About"
+                component={AboutScreen}
+                options={{ title: 'About Us' }}
+            />
+            <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ title: 'Login' }}
+            />
+        </Stack.Navigator>
+        </>
+    );
+}
+
+
+export default function App() {
+    const navigationRef = useRef();
+    const isReadyRef = useRef(false);
+
+
+    return (
+        <>
+            <NavigationContainer 
+                ref={navigationRef}
+                onReady={() => { 
+                    isReadyRef.current = true;
+                }}
+            >
+                <RootStack />
+            </NavigationContainer>
         </>
     );
 }
