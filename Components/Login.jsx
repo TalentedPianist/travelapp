@@ -1,10 +1,11 @@
 import GoogleAuth from './GoogleAuth';
 import GithubAuth from './Login/GithubAuth';
 import { View, Text, StyleSheet } from 'react-native';
-
+import { useState } from 'react';
 
 export default function Login() {
-  
+    const [user, setUser] = useState(null);
+
    return (
     <>
         <View style={styles.containerStyles}>

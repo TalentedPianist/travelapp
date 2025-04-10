@@ -6,13 +6,15 @@ import MyMenu from './MyMenu';
 import { useRef } from 'react';
 import AboutUs from './Components/AboutUs';
 import Login from './Components/Login';
-import GoogleAuth from './Components/GoogleAuth';
+import Home from './Components/Home';
+import { createContext, useContext } from 'react';
+import { createStore, useStore } from 'react';
+
+
 
 function HomeScreen() {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Home Screen</Text>
-        </View>
+        <Home />
     );
 }
 
