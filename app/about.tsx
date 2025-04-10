@@ -1,18 +1,22 @@
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
-export default function About() { 
+import { ScrollView, Text, StyleSheet } from 'react-native';
+
+export default function About() {
     return (
         <>
-            <ScrollView>
+            <ScrollView style={styles.aboutContainer}>
+                <Text style={styles.aboutHeader}>About Us</Text>
                 <Text style={styles.aboutText}>
-                    Adip Esse proident non in culpa anim quis consequat consequat proident. Officia dolore anim reprehenderit id duis dolor deserunt. Magna qui consequat ad ipsum ullamco ex ullamco eu cupidatat mollit irure. Irure Lorem labore fugiat proident reprehenderit ea nisi est sunt anim eu anim aliqua do. Duis nulla Lorem nisi magna excepteur anim sunt. Cupidatat qui aliqua proident labore quis adipisicing adipisicing excepteur. Commodo voluptate est labore velit ex.
-{"\n\n"}
-Cupidatat ea quis culpa exercitation proident irure culpa sit deserunt cillum eiusmod excepteur magna. Non irure nisi ad duis aute enim ut pariatur cillum proident qui excepteur. Magna duis magna nostrud nisi. Enim anim laboris do ex non eiusmod irure sit.
-{"\n\n"}
-Labore ut nulla velit non eiusmod do magna sint incididunt. Ipsum anim quis nisi eiusmod anim aliqua labore dolor qui ut. Aliqua non reprehenderit non amet proident nulla do ut nostrud eu esse nisi duis officia.
-{"\n\n"}
-Est anim ex sunt dolor commodo proident ut laboris id id dolore et cillum velit. Elit voluptate enim ex adipisicing duis cillum ipsum id qui fugiat culpa. Sint in id proident minim. Excepteur consectetur dolor commodo eiusmod enim ipsum commodo id nostrud occaecat. Esse enim commodo esse velit laboris irure aliqua sit. Velit sunt duis exercitation ad dolore Lorem do anim nisi incididunt nulla. Elit consequat commodo ea nisi voluptate tempor voluptate commodo dolor reprehenderit mollit Lorem.
-{"\n\n"}
-Officia excepteur eu adipisicing dolore fugiat nulla aute consequat sunt ea ullamco ex non proident. Ipsum pariatur enim magna aute occaecat dolore Lorem ex veniam ea ad. Deserunt esse laboris consequat magna do dolore laboris non quis culpa veniam. Et ad consectetur sint non adipisicing.
+                    Dolor fugiat consequat quis aliqua sunt consectetur aliqua pariatur. Veniam nostrud id consequat nulla est labore consectetur consequat consectetur sit sunt anim. Proident velit minim non velit mollit reprehenderit mollit elit in cupidatat incididunt sit. Aute qui proident quis minim adipisicing id. Reprehenderit officia ipsum excepteur fugiat ex duis. Officia consequat pariatur est ea irure.
+                    {"\n\n"}
+                    Lorem minim veniam exercitation magna culpa. Aliquip consequat aliqua velit culpa dolor deserunt excepteur aliquip incididunt cillum reprehenderit id. Veniam sint aliquip officia enim elit Lorem ea exercitation occaecat consequat. Eiusmod sit proident minim qui nostrud.
+                    {"\n\n"}
+                    Ullamco elit dolor cupidatat sit reprehenderit pariatur reprehenderit. Non in mollit deserunt ex sunt est nisi aliqua reprehenderit qui sint ullamco excepteur. Laborum ex voluptate tempor ad voluptate eiusmod. Eiusmod Lorem non excepteur adipisicing minim eu. Magna exercitation ipsum elit ea non reprehenderit officia amet. In enim deserunt occaecat ex ullamco amet eu et pariatur. Laborum commodo esse pariatur et occaecat in cupidatat dolore.
+                    {"\n\n"}
+                    Sit sunt laborum aute excepteur dolore aliquip labore do deserunt. Ea pariatur velit laborum excepteur eiusmod exercitation deserunt minim qui ea nulla ex dolor. Ex tempor esse commodo eu reprehenderit et voluptate culpa elit cillum ex.
+                    {"\n\n"}
+                    Proident veniam occaecat fugiat ullamco duis pariatur commodo. Non tempor ad nulla non culpa non nostrud excepteur ex eu consectetur. Consectetur culpa velit enim aliquip. Mollit ut adipisicing nostrud laboris tempor nisi.
+                    {"\n\n"}
+                    Enim eu ut minim sint commodo et. Lorem amet magna nisi laborum esse. Aute et veniam dolor in in ad exercitation. Esse esse amet ipsum nostrud cupidatat veniam. Quis amet anim occaecat mollit consectetur. Nisi ad ex cillum consectetur labore commodo nostrud aliquip in anim incididunt culpa. Voluptate pariatur eiusmod nulla in irure reprehenderit aliquip culpa laboris ut ad aute.
                 </Text>
             </ScrollView>
         </>
@@ -20,10 +24,18 @@ Officia excepteur eu adipisicing dolore fugiat nulla aute consequat sunt ea ulla
 }
 
 const styles = StyleSheet.create({ 
-    aboutText: { 
-        fontSize: 28,
+    aboutContainer: { 
         paddingLeft: 20,
-        paddingRight: 20,
         paddingTop: 20,
+        paddingRight: 20,
+        backgroundColor: 'orange',
     },
+    aboutText: { 
+        fontSize: 20,
+        lineHeight: 30,
+    },
+    aboutHeader: { 
+        fontSize: 38,
+        fontWeight: 'bold',
+    }
 });

@@ -15,12 +15,7 @@ export default function MyMenu() {
         setVisible(false);
     }
 
-    const router = useRouter();
 
-    function navigate(name) {
-        router.navigate(name);
-        setVisible(false);
-    }
 
     return (
         <>
@@ -32,11 +27,11 @@ export default function MyMenu() {
                     <Pressable onPress={hideModal}>
                         <Fontisto name="close-a" size={70} color="white" />
                     </Pressable>
-                    <Pressable onPress={() => navigate('about')}><Text style={styles.modalText}>About</Text></Pressable>
-                    <Pressable onPress={() => navigate('login')}>
-                        <Text style={styles.modalText}>Login</Text></Pressable>
-                    <Pressable onPress={() => navigate('register')}>
-                        <Text style={styles.modalText}>Register</Text>
+                    <Pressable>
+                        <Link href="/about" style={styles.modalText}>About</Link>
+                    </Pressable>
+                    <Pressable>
+                        <Link href="/login" style={styles.modalText}>Login</Link>
                     </Pressable>
                 </Modal>
             </Portal>
@@ -51,14 +46,8 @@ export default function MyMenu() {
 
 const styles = StyleSheet.create({
     modalContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'rgba(0,0,0,0.6)',
+       
+      
     },
     modalText: {
 
