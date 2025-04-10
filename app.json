@@ -12,7 +12,12 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.douglas2.travelapp",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleURLTypes": [
+          { 
+            "CFBundleURLSchemes": ["com.googleusercontent.apps.100784437734-ed4u0lg903tpoh230793vsjb78pk4nr9"]
+        }
+      ]
       }
     },
     "android": {

@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ANDROID_CLIENT_ID, WEB_CLIENT_ID } from '@env';
+import { ANDROID_CLIENT_ID, WEB_CLIENT_ID, IOS_CLIENT_ID } from '@env';
 import React, { useState, useEffect } from 'react';
 import { Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
@@ -11,6 +11,7 @@ WebBrowser.maybeCompleteAuthSession();
 const config = {
     androidClientId: ANDROID_CLIENT_ID,
     webClientId: WEB_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
 }
 
 export default function GoogleAuth() {
