@@ -1,4 +1,9 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react", 
+    "moduleResolution": "node", 
+    "types": ["@types/react-native-dotenv"]
+  },
   "extends": "expo/tsconfig.base"
 }

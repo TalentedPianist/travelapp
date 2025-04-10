@@ -1,15 +1,13 @@
-import { Stack } from 'expo-router';
+import { Stack, Slot } from 'expo-router';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MyMenu from './MyMenu';
-import { PaperProvider } from 'react-native-paper';
+import { SessionProvider } from './ctx';
 
 export default function RootLayout() {
     return (
         <>
-
-            <PaperProvider>
-                
+            <SessionProvider>    
                 <Stack
                     screenOptions={{
                         header: () => (
@@ -24,8 +22,7 @@ export default function RootLayout() {
                     <Stack.Screen name="about" />
                     <Stack.Screen name="login" />
                 </Stack>
-                
-            </PaperProvider>
+            </SessionProvider>
         </>
     );
 }

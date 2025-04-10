@@ -1,43 +1,33 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 import { useState } from 'react';
-import { TouchableOpacity, StyleSheet, Pressable } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Button, Text } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import Modal from 'react-native-modal';
+
+
 
 export default function MyMenu() {
-    const [visible, setVisible] = useState(false);
-    const showModal = () => {
-        setVisible(true);
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => { 
+        setModalVisible(!isModalVisible);
     }
-
-    const hideModal = () => {
-        setVisible(false);
-    }
-
-
 
     return (
         <>
 
-            <Portal>
-                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}
-
-                >
-                    <Pressable onPress={hideModal}>
-                        <Fontisto name="close-a" size={70} color="white" />
-                    </Pressable>
-                    <Pressable>
-                        <Link href="/about" style={styles.modalText}>About</Link>
-                    </Pressable>
-                    <Pressable>
-                        <Link href="/login" style={styles.modalText}>Login</Link>
-                    </Pressable>
-                </Modal>
-            </Portal>
+            <Modal isVisible={isModalVisible} >
+                <View style={styles.modalContainer}>
+                    <Text style={styles.modalHeader}>Navigation Menu</Text>
+                    <Link href="/about" style={styles.modalText}>About</Link>
+                    <Link href="/login" style={styles.modalText}>Login</Link>
+                    <Button title="Hide modal" onPress={toggleModal} />
+                </View>
+            </Modal>
 
 
-            <TouchableOpacity onPress={showModal}>
+            <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="menu" size={70} color="black" />
             </TouchableOpacity>
         </>
@@ -46,8 +36,11 @@ export default function MyMenu() {
 
 const styles = StyleSheet.create({
     modalContainer: {
-       
-      
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        gap: 50,
+        justifyContent: 'space-between',
     },
     modalText: {
 
@@ -57,8 +50,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         color: 'white',
-        fontSize: 40,
+        fontSize: 32,
+        textDecorationLine: 'underline',
     }, 
+    modalHeader: { 
+        fontSize: 38,
+        color: 'white',
+    },
     closeIcon: { 
         color: 'white', 
         fontSize: 32,
