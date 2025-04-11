@@ -6,11 +6,30 @@ import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+async function getUser() { 
+    try { 
+        const userData = await AsyncSTorage.getItem("user");
+        return userData ? JSON.parse(userData) : null;
+    } catch (error) { 
+        console.error("Failed to load data", error);
+    }
+}
+
+
 const LoggedInModal = () => {
     const navigation = useNavigation();
 
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    }
+
     return (
         <>
+         <TouchableOpacity onPress={toggleModal}>
+                <MaterialCommunityIcons name="menu" size={70} color="black" />
+            </TouchableOpacity>
         </>
     );
 }
@@ -49,9 +68,7 @@ const LoggedOutModal = () => {
                 </View>
             </Modal>
 
-            <TouchableOpacity onPress={toggleModal}>
-                <MaterialCommunityIcons name="menu" size={70} color="black" />
-            </TouchableOpacity>
+           
         </>
     );
 }
@@ -59,6 +76,7 @@ const LoggedOutModal = () => {
 export default function MyMenu() { 
     const [user, setUser] = useState(null);
 
+    // useEffect hook solves the problem of the component rendering multiple times (yesterday)
     useEffect(() => { 
         const fetchUser = async () => { 
             try { 
@@ -70,6 +88,7 @@ export default function MyMenu() {
                 console.error('Error fetching user:', error);
             }
         }
+        fetchUser();
     }, []);
 
    return user ? <LoggedInModal /> : <LoggedOutModal />;
