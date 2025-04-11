@@ -9,7 +9,7 @@ import Login from './Components/Login';
 import Home from './Components/Home';
 import { createContext, useContext } from 'react';
 import { createStore, useStore } from 'react';
-
+import { PaperProvider } from 'react-native-paper';
 
 
 function HomeScreen() {
@@ -77,6 +77,7 @@ export default function App() {
 
     return (
         <>
+            <PaperProvider>
             <NavigationContainer
                 ref={navigationRef}
                 onReady={() => {
@@ -85,6 +86,7 @@ export default function App() {
             >
                 <RootStack />
             </NavigationContainer>
+            </PaperProvider>
         </>
     );
 }

@@ -68,6 +68,9 @@ const LoggedOutModal = () => {
                 </View>
             </Modal>
 
+            <TouchableOpacity onPress={toggleModal}>
+                <MaterialCommunityIcons name="menu" size={70} color="black" />
+            </TouchableOpacity>
            
         </>
     );

@@ -26,7 +26,7 @@ export default function GithubAuth() {
             clientId: clientId,
             scopes: ['read:user, read:email'],
             redirectUri: makeRedirectUri({
-                scheme: 'exp://192.168.0.62:8081'
+                scheme: 'exp://192.168.0.37:8081'
             }),
         },
         discovery
@@ -85,9 +85,11 @@ export default function GithubAuth() {
     }
 
     return (
-        <Button style={styles.buttonStyle} title="Login with GitHub" onPress={() => {
+        <TouchableOpacity style={styles.buttonStyle} onPress={() => {
             promptAsync();
-        }} />
+        }}>
+            <Text style={styles.buttonText}>Login with Github</Text>
+        </TouchableOpacity>
 
     );
 }
@@ -99,10 +101,18 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
+       
     },
     buttonStyle: {
         display: 'flex',
-        alignItems: 'flex-start',
         alignSelf: 'flex-start',
+        backgroundColor: 'lightblue',
+        paddingTop: 5, 
+        paddingBottom: 5, 
+        paddingLeft: 5, 
+        paddingRight: 5,
+    },
+    buttonText: { 
+        fontSize: 24,
     }
 });
