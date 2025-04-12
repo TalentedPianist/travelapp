@@ -1,4 +1,4 @@
-import GithubAuth from '../../Login/GithubAuth';
+import GithubAuth from '../Login/GithubAuth';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState, useRef } from 'react';
 import { compare, hash } from 'react-native-simple-bcrypt';

@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
+import BookingForm from './Booking/Form/BookingForm';
 
 export async function getUser() { 
     try { 
@@ -24,7 +25,7 @@ export default function Home() {
 
     return (
         <View style={styles.container}>
-            
+            <BookingForm />
         </View>
     );
 }
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
         flex: 1, 
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'lightgreen',
     },
     countText: { 
         fontSize: 24, 
