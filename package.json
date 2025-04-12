@@ -37,6 +37,8 @@
     "react-dom": "18.3.1",
     "react-hook-form": "^7.55.0",
     "react-native": "0.76.9",
+    "react-native-autocomplete-dropdown": "^4.4.0",
+    "react-native-autocomplete-input": "^5.5.6",
     "react-native-dotenv": "^3.4.11",
     "react-native-elements": "^3.4.3",
     "react-native-encrypted-asyncstorage": "^2.1.4",
