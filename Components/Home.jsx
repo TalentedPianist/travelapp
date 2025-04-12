@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import BookingForm from './Booking/Form/BookingForm';
+import City from './CityForm/City';
 
 export async function getUser() { 
     try { 
@@ -25,7 +26,7 @@ export default function Home() {
 
     return (
         <View style={styles.container}>
-            <BookingForm />
+            <City />
         </View>
     );
 }
