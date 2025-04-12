@@ -10,7 +10,8 @@ import Home from './Components/Home';
 import { createContext, useContext } from 'react';
 import { createStore, useStore } from 'react';
 import { PaperProvider } from 'react-native-paper';
-
+import Profile from './Components/User/Profile/Profile';
+import Register from './Components/User/Register/Register';
 
 function HomeScreen() {
     return (
@@ -29,6 +30,20 @@ function LoginScreen() {
         <>
             <Login />
         </>
+    );
+}
+
+function ProfileScreen() { 
+    return (
+        <>
+            <Profile />
+        </>
+    );
+}
+
+function RegisterScreen() {
+    return (
+        <Register />
     );
 }
 
@@ -63,6 +78,16 @@ function RootStack() {
                     name="Login"
                     component={LoginScreen}
                     options={{ title: 'Login' }}
+                />
+                <Stack.Screen 
+                    name="Profile"
+                    component={ProfileScreen}
+                    options={{ title: 'Profile' }}
+                />
+                <Stack.Screen
+                    name="Register"
+                    component={RegisterScreen}
+                    options={{ title: 'Register' }}
                 />
             </Stack.Navigator>
         </>

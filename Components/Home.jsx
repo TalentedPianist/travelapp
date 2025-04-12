@@ -16,18 +16,15 @@ export default function Home() {
     const [user, setUser] = useState(null);
 
     useEffect(() => { 
-        const fetchUser = async () => { 
-            const userData = await getUser();
-            setUser(userData);
-        };
-        fetchUser();
+        const removeUser = async () => { 
+            await AsyncStorage.clear();
+        }
+        
     }, []);
 
     return (
         <View style={styles.container}>
-            <Text>
-                { user ? `Welcome, ${user.email}` : "User not found"}
-            </Text>
+            
         </View>
     );
 }

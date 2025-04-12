@@ -6,11 +6,11 @@ import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-async function getUser() { 
-    try { 
-        const userData = await AsyncSTorage.getItem("user");
+async function getUser() {
+    try {
+        const userData = await AsyncStorage.getItem("user");
         return userData ? JSON.parse(userData) : null;
-    } catch (error) { 
+    } catch (error) {
         console.error("Failed to load data", error);
     }
 }
@@ -25,9 +25,38 @@ const LoggedInModal = () => {
         setModalVisible(!isModalVisible);
     }
 
+    const handleLogout = async () => { 
+        try { 
+            //await AsyncStorage.removeItem("user");
+        } catch (error) { 
+            console.error("Error removing user: ", error);
+        }
+    }
+
     return (
         <>
-         <TouchableOpacity onPress={toggleModal}>
+            <Modal isVisible={isModalVisible}
+                style={styles.modalContainer}
+                customBackdrop={
+                    <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                        <View style={{ flex: 1, zIndex: 50000 }} />
+                    </TouchableWithoutFeedback>
+                }
+            >
+                <View style={styles.modalContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.modalText}>Home</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                        <Text style={styles.modalText}>Profile</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleLogout()}>
+                        <Text style={styles.modalText}>Logout</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+
+            <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="menu" size={70} color="black" />
             </TouchableOpacity>
         </>
@@ -45,10 +74,10 @@ const LoggedOutModal = () => {
     return (
         <>
             <Modal isVisible={isModalVisible}
-                style={styles.modalContainer} 
+                style={styles.modalContainer}
                 customBackdrop={
                     <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-                        <View style={{flex: 1, zIndex: 50000}} />
+                        <View style={{ flex: 1, zIndex: 50000 }} />
                     </TouchableWithoutFeedback>
                 }
             >
@@ -62,8 +91,12 @@ const LoggedOutModal = () => {
                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                         <Text style={styles.modalText}>Login</Text>
                     </TouchableOpacity>
-                   <TouchableOpacity onPress={() => toggleModal} style={styles.closeButton}>
-                    <Text>Hide Modal</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <Text style={styles.modalText}>Register</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => toggleModal} style={styles.closeButton}>
+                        <Text>Hide Modal</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>
@@ -71,30 +104,29 @@ const LoggedOutModal = () => {
             <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="menu" size={70} color="black" />
             </TouchableOpacity>
-           
+
         </>
     );
 }
 
-export default function MyMenu() { 
+export default function MyMenu() {
     const [user, setUser] = useState(null);
 
     // useEffect hook solves the problem of the component rendering multiple times (yesterday)
-    useEffect(() => { 
+    useEffect(() => {
         const fetchUser = async () => { 
             try { 
-                const storedUser = await AsyncStorage.getItem('user');
-                if (storedUser) { 
-                    setUser(JSON.parse(storedUser));
-                }
-            } catch (error) { 
-                console.error('Error fetching user:', error);
+                const storedUser = await AsyncStorage.getItem("user");
+                setUser(storedUser ? JSON.parse(storedUser) : null);
+            } catch (error)  {
+                console.error(error);
             }
         }
         fetchUser();
+        
     }, []);
 
-   return user ? <LoggedInModal /> : <LoggedOutModal />;
+    return user ? <LoggedInModal /> : <LoggedOutModal />;
 }
 
 
@@ -122,13 +154,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 32,
     },
-    closeButton: { 
+    closeButton: {
         backgroundColor: 'lightblue',
         display: 'flex',
         alignSelf: 'flex-start',
-        paddingLeft: 10, 
+        paddingLeft: 10,
         paddingTop: 10,
-        paddingBottom: 10, 
+        paddingBottom: 10,
         paddingRight: 10,
         marginTop: 20,
     }
