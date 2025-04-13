@@ -12,6 +12,7 @@ import { createStore, useStore } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import Profile from './Components/User/Profile/Profile';
 import Register from './Components/User/Register/Register';
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 
 function HomeScreen() {
     return (
@@ -33,7 +34,7 @@ function LoginScreen() {
     );
 }
 
-function ProfileScreen() { 
+function ProfileScreen() {
     return (
         <>
             <Profile />
@@ -79,7 +80,7 @@ function RootStack() {
                     component={LoginScreen}
                     options={{ title: 'Login' }}
                 />
-                <Stack.Screen 
+                <Stack.Screen
                     name="Profile"
                     component={ProfileScreen}
                     options={{ title: 'Profile' }}
@@ -102,16 +103,18 @@ export default function App() {
 
     return (
         <>
+            <AutocompleteDropdownContextProvider>
             <PaperProvider>
-            <NavigationContainer
-                ref={navigationRef}
-                onReady={() => {
-                    isReadyRef.current = true;
-                }}
-            >
-                <RootStack />
-            </NavigationContainer>
+                <NavigationContainer
+                    ref={navigationRef}
+                    onReady={() => {
+                        isReadyRef.current = true;
+                    }}
+                >
+                    <RootStack />
+                </NavigationContainer>
             </PaperProvider>
+            </AutocompleteDropdownContextProvider>
         </>
     );
 }

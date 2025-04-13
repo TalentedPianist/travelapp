@@ -1,12 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions, Button, FlatList } from 'react-native';
 import { memo, useCallback, useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Provider as PaperProvider, TextInput } from 'react-native-paper';
-import { useIsFocused } from '@react-navigation/native';
-import {
-    AutocompleteDropdown,
-    AutocompleteDropdownRef,
-} from 'react-native-autocomplete-dropdown';
+import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import { DropDown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { Dropdown } from 'react-native-paper-dropdown';
 
 const rapidKey = '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba';
 const rapidUrl = 'https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation'
@@ -21,49 +20,11 @@ export default function City() {
 
     const searchRef = useRef(null);
 
-    const getSuggestions = useCallback(async q => {
-        const filterToken = q.toLowerCase();
-        
-        console.log('getSuggestions', q); // This is where to come back tomorrow and work.
-
-        if (typeof q !== 'string' || q.length < 3) {
-            setSuggestionsList(null);
-            return;
-        }
-        setLoading(true);
-        const response = await axios.get(rapidUrl, {
-            headers: {
-                'x-rapidapi-key': rapidKey,
-                'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com',
-            },
-            params: { query: 'Glasgow' },
-        }).then((res) => {
-            const items = res.data;
-            const suggestions = items
-                .filter(item => item.title.toLowerCase().includes(filterToken))
-                .map(item => ({
-                    id: item.id,
-                    title: item.title
-                }))
-            setSuggestionsList(suggestions);
-            setLoading(false);
-        }).then((err) => {
-            console.log(err);
-        });
-    }, []);
-
-    const onClearPress = useCallback(() => {
-        setSuggestionsList(null);
-    }, []);
-
-    const onOpenSuggestionsList = useCallback(isOpened => { }, []);
-
-
-    const getCity = async () => {
+    const getCity = async (q) => {
         const options = {
             method: 'GET',
             url: 'https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation',
-            params: { query: 'Glasgow' },
+            params: { query: q },
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
                 'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com'
@@ -72,18 +33,52 @@ export default function City() {
 
         try {
             const response = await axios.request(options);
-            console.log(response.data);
+            setCityData(response.data);
+            setSuggestionsList(response.data);
         } catch (error) {
             console.error(error);
         }
     }
 
+    const handleSelectItem = (item) => { 
+        if (item?.title === "Glasgow") { 
+        }
+    };
 
+    const handleGetCity = () =>  {
+        getCity();
 
-    useEffect(() => {
-        console.log(getCity());
+    }
+
+    const getSuggestions = useCallback(async (q) => { 
+        const filterToken = q.toLowerCase();
+        console.log(q);
+        if (q.length < 3) { 
+            setSuggestionsList(null);
+        }
+        setLoading(true);
+        axios.get('https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation', {
+            headers: { 
+                'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
+                'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com',
+            }, 
+            params: { query: 'Glasgow' },
+        }).then((res) => {
+           const formattedSuggestions = res.data.data.map((item, index) => ({ 
+            id: index.toString(),
+            title: item.name, // Remove HTML tags
+           }));
+           setSuggestionsList(res.data.data);
+           console.log(res);
+        }).then((err) => console.error(err));
     }, []);
 
+    useEffect(() => {
+        console.log(suggestionsList);
+    }, []);
+
+    
+    
     return (
         <>
             <View style={styles.cityContainer}>
@@ -91,63 +86,22 @@ export default function City() {
                     <Text style={styles.headerStyle}>Find a City</Text>
 
                     <AutocompleteDropdown
+                        clearOnFocus={false}
+                        closeOnBlur={true}
+                        closeOnSubmit={false}
+                        onSelectItem={setSelectedItem}
                         ref={searchRef}
-                        controller={controller => {
-                            dropdownController.current = controller
-                        }}
-                        direction={Platform.select({ ios: 'down' })}
-                        dataSet={suggestionsList}
                         onChangeText={getSuggestions}
-                        onSelectItem={item => {
-                            item && setSelectedItem(item.id)
-                        }}
-                        debounce={600}
-                        suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
-                        onClear={onClearPress}
-                        onOpenSuggestionsList={onOpenSuggestionsList}
-                        loading={loading}
-                        useFilter={false}
-                        textInputProps={{
-                            placeholder: 'Type 3+ letters (dolo...)',
-                            autoCorrect: false,
-                            autoCapitalize: 'none',
-                            style: {
-                                borderRadius: 25,
-                                backgroundColor: '#383b42',
-                                color: '#fff',
-                                paddingLeft: 18,
-                            },
-                        }}
-                        rightButtonsContainerStyle={{
-                            right: 8,
-                            height: 30,
-                            alignSelf: 'center'
-                        }}
-                        inputContainerStyle={{
-                            backgorundColor: '#383b42',
-                            borderRadius: 25,
-                        }}
-                        suggestionsListContainerStyle={{
-                            backgroundColor: '#383b42',
-                        }}
-                        containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-                        renderItem={(item, text) => <Text>{item.title}</Text>}
-                        inputHeight={50}
-                        showChevron={false}
-                        closeOnBlur={false}
+                        dataSet={suggestionsList}
                     />
-                    <View style={{ width: 10 }} />
-                    <Button style={{ flexGrow: 0 }} title="Toggle" onPress={() => dropdownController.current.toggle()} />
-            
-            <Text style={{ color: '#668', fontSize: 13 }}>Selected item: {JSON.stringify(selectedItem)}</Text>
 
-            <TouchableOpacity onPress={() => getCity()} style={styles.buttonText}>
+                    
+
+
+                    <TouchableOpacity onPress={handleGetCity} style={styles.buttonText}>
                         <Text style={styles.buttonText}>Search</Text>
-        </TouchableOpacity >
-            { cityData && (
-                <Text style={styles.cityText}>{JSON.stringify(cityData, null, 2)}</Text>
-            )
-}
+                    </TouchableOpacity >
+                   
                 </PaperProvider >
             </View >
         </>
