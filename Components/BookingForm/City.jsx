@@ -71,7 +71,7 @@ export default function City({ sendDataToParent }) {
     return (
         <>
     
-            
+
                     <Text style={styles.headerStyle}>Find a City</Text>
 
                     <AutocompleteDropdown
@@ -110,7 +110,7 @@ export default function City({ sendDataToParent }) {
                             sendDataToParent(item?.title);
                         }}              
                     />
-
+                
         </>
     );
 }
@@ -121,9 +121,9 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         paddingTop: 20,
         paddingBottom: 20,
-        display: 'flex',
         width: '100%',
         height: '100%',
+
     },
     cityText: {
         color: 'white',
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     cityInput: {
-
+        display: 'flex',
         backgroundColor: 'orange',
         width: '100%',
     },

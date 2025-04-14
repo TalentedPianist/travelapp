@@ -3,9 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, createContext } from 'react';
 import City from './BookingForm/City';
 import FromDate from './BookingForm/FromDate';
+import ToDate from './BookingForm/ToDate';
+import NoOfGuests from './BookingForm/NoOfGuests';
+import NoOfRooms from './BookingForm/NoOfRooms';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
-const BookingFormContext = createContext();
 
 export default function Home({ sendDataToParent }) {
 
@@ -13,17 +15,27 @@ export default function Home({ sendDataToParent }) {
     const [fromDate, setFromDate] = useState("");
 
     const handleDataFromChild = (data) => {
-        console.log(data.component);
+        console.log(data);
     };
 
-    console.log('Home component rendered');
+
     return (
         <>
             <View style={styles.container}>
+                <View style={styles.firstRow}>
+                    <City sendDataToParent={handleDataFromChild} />
+                </View>
+                <View style={styles.secondRow}>
+                    <FromDate sendDataToParent={handleDataFromChild} />
+                    <ToDate sendDataToParent={handleDataFromChild} />
 
-                <City sendDataToParent={handleDataFromChild} />
-                <FromDate sendDataToParent={handleDataFromChild} />
-
+                </View>
+                <View style={styles.thirdRow}>
+                    <NoOfGuests sendDataToParent={handleDataFromChild} />
+                    <NoOfRooms sendDataToParent={handleDataFromChild} />
+                </View>
+                <View style={styles.fourthRow}>
+                </View>
             </View>
         </>
     );
@@ -32,13 +44,47 @@ export default function Home({ sendDataToParent }) {
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
+        flexDirection: 'column',
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: 20,
-        height: '100%',
-        width: '100%',
+        alignSelf: 'flex-start',
+        justifyContent: 'space-evenly',
         backgroundColor: 'lightgreen',
+        gap: 10,
+        paddingLeft: 10,
     },
-  
+    firstRow: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        width: '100%',
+        display: 'flex',
+        marginBottom: 20,
+    },
+    secondRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        flex: 0,
+        alignItems: 'flex-start',
+        width: '100%',
+        gap: 50,
+        marginBottom: 20,
+    },
+    thirdRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        width: '100%',
+        marginBottom: 10,
+    },
+    fourthRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        flex: 0,
+        alignItems: 'flex-start',
+        width: '100%',
+
+    }
 });
