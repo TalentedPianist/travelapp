@@ -1,23 +1,18 @@
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions, Button, FlatList } from 'react-native';
-import { memo, useCallback, useRef, useEffect, useState } from 'react';
+import { memo, useCallback, useRef, useEffect, useState, useContext, createContext } from 'react';
 import axios from 'axios';
 import { Provider as PaperProvider, TextInput } from 'react-native-paper';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { DropDown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Dropdown } from 'react-native-paper-dropdown';
+import FromDate from './FromDate';
+import { BookingFormContext } from '../Home';
 
-const rapidKey = '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba';
-const rapidUrl = 'https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation'
-
-export default function City() {
-    const [cityData, setCityData] = useState(null);
-    const [text, setText] = useState('');
+export default function City({ sendDataToParent }) {
     const [loading, setLoading] = useState(false);
     const [suggestionsList, setSuggestionsList] = useState(null);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const dropdownController = useRef(null);
-
+    const [seletctedItem, setSelectedItem] = useState();
     const searchRef = useRef(null);
 
     const getCity = async (q) => {
@@ -40,11 +35,6 @@ export default function City() {
         }
     }
 
-    const handleSelectItem = (item) => {
-        if (item?.title === "Glasgow") {
-        }
-    };
-
     const handleGetCity = () => {
         getCity();
 
@@ -52,33 +42,30 @@ export default function City() {
 
     const getSuggestions = useCallback(async (q) => {
 
-        const filterToken = q.toLowerCase();
         console.log(q);
         if (q.length < 3) {
             setSuggestionsList(null);
         }
-        setLoading(true);
-        axios.get('https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation', {
+
+        axios.get('https://skyscanner89.p.rapidapi.com/hotels/auto-complete', {
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com',
+                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com',
             },
             params: { query: q },
         }).then((res) => {
-            let title = undefined;
-            const formattedSuggestions = res.data.data.map((item, index) => ({
+            const formattedSuggestions = res.data.map((item, index) => ({
                 id: index.toString(),
-                title: `${item.title}, ${item.secondaryText}`,
+                title: item?.entityName,
             }));
             setSuggestionsList(formattedSuggestions);
-            console.log(formattedSuggestions);
+           console.log(formattedSuggestions);
         }).then((err) => console.error(err));
     }, []);
 
     useEffect(() => {
-        console.log(suggestionsList);
+      console.log(suggestionsList);
     }, []);
-
 
 
     return (
@@ -91,7 +78,6 @@ export default function City() {
                         clearOnFocus={false}
                         closeOnBlur={true}
                         closeOnSubmit={false}
-                        onSelectItem={setSelectedItem}
                         ref={searchRef}
                         onChangeText={getSuggestions}
                         dataSet={suggestionsList}
@@ -115,13 +101,17 @@ export default function City() {
                             paddingRight: 20,
                             paddingTop: 20,
                             paddingBottom: 20,
-                        }}>{item.title.replace(/<([^>]+)>/gi, '')
+                        }}>{item?.title
                             }
                         </Text>}
+                        onSelectItem={(item) => { 
+                            setSelectedItem(item?.title);
+                            // Here we move on to the next form fields.
+                            sendDataToParent(item?.title);
+                        }}              
                     />
-
-
-
+        
+                    <Text>Test</Text>
 
                     <TouchableOpacity onPress={handleGetCity} style={styles.buttonText}>
                         <Text style={styles.buttonText}>Search</Text>

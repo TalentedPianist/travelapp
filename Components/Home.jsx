@@ -1,38 +1,42 @@
 import { View, Text, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
-import BookingForm from './Booking/Form/BookingForm';
-import City from './CityForm/City';
+import { useState, useEffect, createContext } from 'react';
+import City from './BookingForm/City';
+import FromDate from './BookingForm/FromDate';
 
-export async function getUser() { 
-    try { 
-        const userData = await AsyncStorage.getItem("user");
-        return userData ? JSON.parse(userData) : null;
-    } catch (error) { 
-        console.error("Failed to load data", error);
-    }
-}
+const BookingFormContext = createContext();
 
-export default function Home() { 
-    // async operations should always be inside useEffect hook
-    const [user, setUser] = useState(null);
+export default function Home() {
+
+    const [city, setCity] = useState("");
+    const [fromDate, setFromDate] = useState("");
+
+    const handleDataFromChild = (data) => {
+        console.log("Received data from child: ", data);
+        setCity(data);
+    };
 
     return (
         <View style={styles.container}>
-            <City />
+
+            <City sendDataToParent={handleDataFromChild} />
+            <FromDate />
+
         </View>
     );
 }
 
-const styles = StyleSheet.create({ 
-    container: { 
-    
-        justifyContent: 'center',
-        alignItems: 'center',
+const styles = StyleSheet.create({
+    container: {
+        display: 'flex',
+        flex: 0,
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
         backgroundColor: 'lightgreen',
+        height: '100%',
     },
-    countText: { 
-        fontSize: 24, 
+    countText: {
+        fontSize: 24,
         marginBottom: 20,
     }
 });
