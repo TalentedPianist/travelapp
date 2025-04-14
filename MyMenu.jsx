@@ -95,7 +95,7 @@ const LoggedOutModal = () => {
                         <Text style={styles.modalText}>Register</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => toggleModal} style={styles.closeButton}>
+                    <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
                         <Text>Hide Modal</Text>
                     </TouchableOpacity>
                 </View>

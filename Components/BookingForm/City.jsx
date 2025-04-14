@@ -111,7 +111,7 @@ export default function City({ sendDataToParent }) {
                         }}              
                     />
         
-                    <Text>Test</Text>
+                    <FromDate />
 
                     <TouchableOpacity onPress={handleGetCity} style={styles.buttonText}>
                         <Text style={styles.buttonText}>Search</Text>

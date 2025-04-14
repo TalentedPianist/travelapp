@@ -20,7 +20,7 @@ export default function Home() {
         <View style={styles.container}>
 
             <City sendDataToParent={handleDataFromChild} />
-            <FromDate />
+          
 
         </View>
     );
