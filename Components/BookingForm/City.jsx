@@ -67,11 +67,11 @@ export default function City({ sendDataToParent }) {
       console.log(suggestionsList);
     }, []);
 
-
+        // Mention the render issue in the report.  If you have a View element around external components they won't render.
     return (
         <>
-            <View style={styles.cityContainer}>
-                <PaperProvider>
+    
+            
                     <Text style={styles.headerStyle}>Find a City</Text>
 
                     <AutocompleteDropdown
@@ -110,15 +110,7 @@ export default function City({ sendDataToParent }) {
                             sendDataToParent(item?.title);
                         }}              
                     />
-        
-                    <FromDate />
 
-                    <TouchableOpacity onPress={handleGetCity} style={styles.buttonText}>
-                        <Text style={styles.buttonText}>Search</Text>
-                    </TouchableOpacity >
-
-                </PaperProvider >
-            </View >
         </>
     );
 }
@@ -136,6 +128,7 @@ const styles = StyleSheet.create({
     cityText: {
         color: 'white',
         fontSize: 24,
+        width: '100%',
     },
     cityInput: {
 

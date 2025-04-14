@@ -16,7 +16,9 @@ import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-d
 
 function HomeScreen() {
     return (
+
         <Home />
+
     );
 }
 
@@ -104,16 +106,16 @@ export default function App() {
     return (
         <>
             <AutocompleteDropdownContextProvider>
-            <PaperProvider>
-                <NavigationContainer
-                    ref={navigationRef}
-                    onReady={() => {
-                        isReadyRef.current = true;
-                    }}
-                >
-                    <RootStack />
-                </NavigationContainer>
-            </PaperProvider>
+                <PaperProvider>
+                    <NavigationContainer
+                        ref={navigationRef}
+                        onReady={() => {
+                            isReadyRef.current = true;
+                        }}
+                    >
+                        <RootStack />
+                    </NavigationContainer>
+                </PaperProvider>
             </AutocompleteDropdownContextProvider>
         </>
     );
