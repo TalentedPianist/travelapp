@@ -13,9 +13,10 @@ export default function Home({ sendDataToParent }) {
 
     const [city, setCity] = useState("");
     const [fromDate, setFromDate] = useState("");
+    const [noOfGuests, setNoOfGuests] = useState();
 
     const handleDataFromChild = (data) => {
-        console.log(data);
+        
     };
 
 

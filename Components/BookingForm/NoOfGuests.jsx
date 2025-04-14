@@ -2,15 +2,22 @@ import { View, Text, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useState } from 'react';
 
-export default function NoOfGuests() {
-    const [guests, setGuests] = useState(0);
+export default function NoOfGuests({ sendDataToParent }) {
+    const [noOfGuests, setNoOfGuests] = useState(0);
+
+    const handleTextChange = (e) => { 
+        // Send to parent component
+        sendDataToParent({ data: e, component: 'NoOfGuests' });
+    }
 
     return (
         <>
             <View style={styles.container}>
                 <TextInput
-                    onChangeText={guests => setGuests(guests)}
+                    label="Number of Guests"
+                    onChangeText={handleTextChange}
                     style={styles.inputText}
+                    inputMode="numeric"
                 />
             </View>
         </>
@@ -20,11 +27,12 @@ export default function NoOfGuests() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'flex-start',
+        justifyContent: 'center',
+        alignItems: 'center',
         alignSelf: 'flex-start',
     },
     inputText: {
         backgroundColor: 'orange',
-        width: '100%',
+        width: '50%',
     },
 });

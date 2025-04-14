@@ -59,68 +59,63 @@ export default function City({ sendDataToParent }) {
                 title: item?.entityName,
             }));
             setSuggestionsList(formattedSuggestions);
-           console.log(formattedSuggestions);
+            console.log(formattedSuggestions);
         }).then((err) => console.error(err));
     }, []);
 
     useEffect(() => {
-      console.log(suggestionsList);
+        console.log(suggestionsList);
     }, []);
 
-        // Mention the render issue in the report.  If you have a View element around external components they won't render.
+    // Mention the render issue in the report.  If you have a View element around external components they won't render.
     return (
         <>
-    
 
-                    <Text style={styles.headerStyle}>Find a City</Text>
+            <Text style={styles.headerStyle}>Find a City</Text>
 
-                    <AutocompleteDropdown
-                        clearOnFocus={false}
-                        closeOnBlur={true}
-                        closeOnSubmit={false}
-                        ref={searchRef}
-                        onChangeText={getSuggestions}
-                        dataSet={suggestionsList}
-                        style={styles.autoDropdown}
-                        textInputProps={{
-                            placeholder: "Type a city name...",
-                            placeholderTextColor: '#000',
-                            autoCorrect: false,
-                            autoCapitalize: 'none',
-                            style: {
-                                backgroundColor: 'orange',
-                                width: '100%',
-                            }
-                        }}
-                        renderItem={(item, text) => <Text style={{
-                            backgroundColor: 'yellow',
-                            color: '#000',
-                            fontSize: 22,
-                            width: '100%',
-                            paddingLeft: 20,
-                            paddingRight: 20,
-                            paddingTop: 20,
-                            paddingBottom: 20,
-                        }}>{item?.title
-                            }
-                        </Text>}
-                        onSelectItem={(item) => { 
-                            setSelectedItem(item?.title);
-                            // Here we move on to the next form fields.
-                            sendDataToParent(item?.title);
-                        }}              
-                    />
-                
+            <AutocompleteDropdown
+                clearOnFocus={false}
+                closeOnBlur={true}
+                closeOnSubmit={false}
+                ref={searchRef}
+                onChangeText={getSuggestions}
+                dataSet={suggestionsList}
+                style={styles.autoDropdown}
+                textInputProps={{
+                    placeholder: "Type a city name...",
+                    placeholderTextColor: '#000',
+                    autoCorrect: false,
+                    autoCapitalize: 'none',
+                    style: {
+                        backgroundColor: 'orange',
+                        minWidth: '90%',
+                    }
+                }}
+                renderItem={(item, text) => <Text style={{
+                    backgroundColor: 'yellow',
+                    color: '#000',
+                    fontSize: 22,
+                    width: '100%',
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                }}>{item?.title
+                    }
+                </Text>}
+                onSelectItem={(item) => {
+                    setSelectedItem(item?.title);
+                    // Here we move on to the next form fields.
+                    sendDataToParent(item?.title);
+                }}
+            />
+
         </>
     );
 }
 
 const styles = StyleSheet.create({
     cityContainer: {
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 20,
-        paddingBottom: 20,
         width: '100%',
         height: '100%',
 
