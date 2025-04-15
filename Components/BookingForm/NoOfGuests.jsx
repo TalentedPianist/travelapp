@@ -7,7 +7,7 @@ export default function NoOfGuests({ sendDataToParent }) {
 
     const handleTextChange = (e) => { 
         // Send to parent component
-        sendDataToParent({ data: e, component: 'NoOfGuests' });
+        sendDazaToParent({ noOfGuests: e, component: 'NoOfGuests' });
     }
 
     return (
@@ -30,9 +30,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'flex-start',
+    
     },
     inputText: {
         backgroundColor: 'orange',
-        width: '50%',
+        width: '100%',
     },
 });

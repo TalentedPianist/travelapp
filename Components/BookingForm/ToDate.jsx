@@ -33,7 +33,7 @@ export default function ToDate({ sendDataToParent }) {
         setToDate(currentDate);
         console.log('ToDate sendDataToParent:', { date: currentDate, component: 'ToDate' });
         if (typeof sendDataToParent === 'function') {
-            sendDataToParent({ date: currentDate, component: 'ToDate' });
+            sendDataToParent({ toDate: currentDate.toISOString().split('T')[0], component: 'ToDate' });
         }
     };
 
@@ -43,7 +43,7 @@ export default function ToDate({ sendDataToParent }) {
                 {showPicker && (
                     <RNDateTimePicker
                         design="material"
-                        value={new Date()}
+                        value={toDate}
                         mode="date" // Specify the mode (date or time)
                         display={Platform.os === 'ios' ? 'spinner' : 'default'}
                         onChange={onChange}
@@ -67,7 +67,7 @@ export default function ToDate({ sendDataToParent }) {
 const styles = StyleSheet.create({
     textInput: {
         backgroundColor: 'orange',
-        marginRight: 20,
+   
     },
     containerStyle: {
         flex: 1,

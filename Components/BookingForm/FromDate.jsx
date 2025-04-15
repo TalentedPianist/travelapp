@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Platform, Button, Icon } from
 import { TextInput, PaperProvider } from 'react-native-paper';
 import * as Calendar from 'expo-calendar';
 import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { Dropdown } from 'react-native-paper-dropdown';
 
 export default function FromDate({ sendDataToParent }) {
 
@@ -34,10 +35,8 @@ export default function FromDate({ sendDataToParent }) {
         const currentDate = selectedDate;
         setShowPicker(false);
         setFromDate(currentDate);
-        sendDataToParent({ date: currentDate, component: 'FromDate' });
+        sendDataToParent({ fromDate: currentDate.toDateString(), component: 'FromDate' });
     };
-
-    console.log('Rendering FromDate component');
 
     return (
         <>
@@ -46,7 +45,7 @@ export default function FromDate({ sendDataToParent }) {
                 {showPicker && (
                     <RNDateTimePicker 
                     design="material"
-                    value={new Date()} // Pass the date state as the value
+                    value={fromDate.toDateString()}
                     mode="date" // Specify the mode (date or time)
                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                     onChange={onChange} 
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'orange',
         width: '100%',
         display: 'flex',
-        marginLeft: 5,
+
     },
     containerStyle: {
         display: 'flex',

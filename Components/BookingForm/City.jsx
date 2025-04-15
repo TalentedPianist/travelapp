@@ -18,16 +18,18 @@ export default function City({ sendDataToParent }) {
     const getCity = async (q) => {
         const options = {
             method: 'GET',
-            url: 'https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation',
+            url: 'https://sky-scanner3.p.rapidapi.com/hotels/auto-complete',
             params: { query: q },
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com'
+                'x-rapidapi-host': 'sky-scanner3.p.rapidapi.com'
             }
         }
 
         try {
             const response = await axios.request(options);
+            console.log(response);
+         
             setCityData(response.data);
             setSuggestionsList(response.data);
         } catch (error) {
@@ -47,19 +49,21 @@ export default function City({ sendDataToParent }) {
             setSuggestionsList(null);
         }
 
-        axios.get('https://skyscanner89.p.rapidapi.com/hotels/auto-complete', {
+        axios.get('https://sky-scanner3.p.rapidapi.com/hotels/auto-complete', {
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com',
+                'x-rapidapi-host': 'sky-scanner3.p.rapidapi.com',
             },
             params: { query: q },
         }).then((res) => {
-            const formattedSuggestions = res.data.map((item, index) => ({
+            console.log(res.data.data);
+            const formattedSuggestions = res.data.data.map((item, index) => ({
                 id: index.toString(),
                 title: item?.entityName,
+                entityId: item?.entityId,
             }));
             setSuggestionsList(formattedSuggestions);
-            console.log(formattedSuggestions);
+       
         }).then((err) => console.error(err));
     }, []);
 
@@ -70,9 +74,6 @@ export default function City({ sendDataToParent }) {
     // Mention the render issue in the report.  If you have a View element around external components they won't render.
     return (
         <>
-
-            <Text style={styles.headerStyle}>Find a City</Text>
-
             <AutocompleteDropdown
                 clearOnFocus={false}
                 closeOnBlur={true}
@@ -106,7 +107,7 @@ export default function City({ sendDataToParent }) {
                 onSelectItem={(item) => {
                     setSelectedItem(item?.title);
                     // Here we move on to the next form fields.
-                    sendDataToParent(item?.title);
+                    sendDataToParent({ city: item?.title, component: 'City', entityId: item?.entityId});
                 }}
             />
 
