@@ -11,17 +11,8 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import axios from 'axios';
 import moment from 'moment';
 import HotelModal from './BookingForm/HotelModal';
+import HotelsList from './BookingForm/HotelsList';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
-import {
-    useQuery,
-    useMutation,
-    useQueryClient,
-    QueryClient,
-    QueryClientProvider,
-} from '@tanstack/react-query';
-
-// Create a query client
-const queryClient = new QueryClient();
 
 
 export default function Home({ sendDataToParent }) {
@@ -76,7 +67,7 @@ export default function Home({ sendDataToParent }) {
 
         // Things like misspelled variables can cause a silent error in JavaScript.
 
-        const apiUrl = `https://skyscanner89.p.rapidapi.com/hotels/list?entity_id=${entityId}&checkin=${moment(fromDate).format('YYYY-MM-DD')}&checkout=${moment(toDate).format('YYYY-MM-DD')}`;
+        const apiUrl = `https://skyscanner89.p.rapidapi.com/hotels/list?entity_id=${entityId}&checkin=${moment(fromDate).format('YYYY-MM-DD')}&checkout=${moment(toDate).format('YYYY-MM-DD')}&per_page=5`;
         const options = {
             method: 'GET',
             headers: {
@@ -86,7 +77,10 @@ export default function Home({ sendDataToParent }) {
         };
         // There seems to be a problem with axios randomly not getting data even though it worked before.  fetch API is a lot nicer and just works.
         try {
+            //setLoading(true);
             const response = await fetch(apiUrl, options);
+           
+
             const data = await response.json(); // This line is the key to getting it working.  Explain in report that it needs await.  Fetch seems to be faster too.
             //console.log(data.results.hotelCards);
             setHotelsList(data.results.hotelCards);
@@ -97,36 +91,20 @@ export default function Home({ sendDataToParent }) {
 
 
     useEffect(() => {
-        setLoading(false);
+  
         console.log(hotelsList);
     }, []);
 
-    const Item = ({ title }) => (
-        <View style={styles.item}>
-            <Text style={styles.hotelsListText}>{title}</Text>
-        </View>
-    );
-
-    const ListHeaderComponent = () => {
-        <View>
-            <Text>Hotels List</Text>
-        </View>
-    }
+    
+   
 
     return (
         <>
-            <View style={{ flexGrow: 1, backgroundColor: 'lightgreen' }}>
-
-            </View>
-
-
+          
             <ScrollView style={styles.container} ref={formRef}>
-                <FlatList
-                    data={hotelsList}
-                    renderItem={({ item }) => <Item title={item.name} />}
-                    ListHeaderComponent={ListHeaderComponent}
-                    windowSize={10}
-                />
+                { loading && <ActivityIndicator animated={true} size="large" /> }
+                <HotelsList data={hotelsList} />
+
                 <Text style={styles.headerText}>Find a Hotel</Text>
                 <>
                     <View style={styles.firstRow}>
@@ -223,39 +201,5 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         alignItems: 'flex-start',
     },
-    hotelsList: {
-        backgroundColor: 'lightgreen',
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        height: '100%',
-        flex: 1,
-        paddingLeft: 20,
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingRight: 20,
-    },
-    hotelsListText: {
-        fontSize: 18,
-        marginRight: 30,
-        marginTop: 10,
-        marginBottom: 10,
-    },
-    viewButton: {
-        backgroundColor: 'beige',
-        alignSelf: 'flex-start',
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    item: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginRight: 20,
 
-    }
 });
