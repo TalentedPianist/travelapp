@@ -36,16 +36,9 @@
         "projectId": "105e583f-b44d-4c4b-9405-2a0c949ed441"
       }
     },
+   
     "owner": "douglas2",
-    "plugins": [
-      [
-        "expo-secure-store",
-        {
-          "configureAndroidBackup": true,
-          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
-        }
-      ]
+    "plugins": []
      
-    ]
   }
 }

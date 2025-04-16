@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -14,6 +14,8 @@ import Profile from './Components/User/Profile/Profile';
 import Register from './Components/User/Register/Register';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
 
 AsyncStorage.getAllKeys((err, keys) => { 
     AsyncStorage.multiGet(keys, (error, stores) => { 
@@ -21,7 +23,7 @@ AsyncStorage.getAllKeys((err, keys) => {
         stores.map((result, i, store) => { 
             asyncStorage[store[i][0]] = store[i][1]
         });
-        //console.log(asyncStorage);
+        console.log(asyncStorage);
     });
 });
 
@@ -65,7 +67,7 @@ function RegisterScreen() {
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
-
+    const navigation = useNavigation();
 
     return (
         <>
@@ -73,7 +75,9 @@ function RootStack() {
                 screenOptions={{
                     header: () => (
                         <View style={styles.headerStyles}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                             <FontAwesome5 name="home" size={70} color="black" />
+                            </TouchableOpacity>
                             <MyMenu />
                         </View>
                     )

@@ -1,4 +1,4 @@
-import { FlatList, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, Button } from 'react-native';
+import { FlatList, View, Text, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useRef } from 'react';
 import City from './BookingForm/City';
@@ -11,7 +11,17 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import axios from 'axios';
 import moment from 'moment';
 import HotelModal from './BookingForm/HotelModal';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+} from '@tanstack/react-query';
 
+// Create a query client
+const queryClient = new QueryClient();
 
 
 export default function Home({ sendDataToParent }) {
@@ -27,7 +37,14 @@ export default function Home({ sendDataToParent }) {
     const [loading, setLoading] = useState(false); // Define loading state for activity indicator
     const [hotelsList, setHotelsList] = useState([]); // Be sure to define the array correctly!
     const [isVisible, setIsVisible] = useState(true);
+    const [rapid, setRapid] = useState([]);
 
+    // Begin pagination variables
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [refreshing, setRefreshing] = useState(false);
+    const itemsPerPage = 5;
+    // End pagination variables
 
     const handleDataFromChild = (data) => {
         // Here we need to handle the data sent from child components so that the parent component doesn't refresh.  If the parent components refresh, input components loose their value.
@@ -58,114 +75,80 @@ export default function Home({ sendDataToParent }) {
         // Mention in the report that this only works with query params in the url rather than in axios options.
 
         // Things like misspelled variables can cause a silent error in JavaScript.
-        await axios.get(`https://sky-scanner3.p.rapidapi.com/hotels/search?checkin=${moment(fromDate).format('YYYY-MM-DD')}&checkout=${moment(toDate).format('YYYY-MM-DD')}`, {
+
+        const apiUrl = `https://skyscanner89.p.rapidapi.com/hotels/list?entity_id=${entityId}&checkin=${moment(fromDate).format('YYYY-MM-DD')}&checkout=${moment(toDate).format('YYYY-MM-DD')}`;
+        const options = {
+            method: 'GET',
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'sky-scanner3.p.rapidapi.com',
-            },
-            params: {
-                entityId: entityId,
-                maxResults: 5,
+                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com',
             }
-        }).then((res) => {
-            setHotelsList(res.data.data.results.hotelCards);
-
-
-        }).then((err) => console.error(err));
+        };
+        // There seems to be a problem with axios randomly not getting data even though it worked before.  fetch API is a lot nicer and just works.
+        try {
+            const response = await fetch(apiUrl, options);
+            const data = await response.json(); // This line is the key to getting it working.  Explain in report that it needs await.  Fetch seems to be faster too.
+            //console.log(data.results.hotelCards);
+            setHotelsList(data.results.hotelCards);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const value = await AsyncStorage.getItem('hotel');
-                if (value === true) {
-                    setIsVisible(true);
-                    setHotelsList(value);
-                    
-                } else {
-                    setIsVisible(false);
-                }
-
-            } catch (error) {
-                console.error('Error retrieving data:', error);
-            }
-        };
-        getData();
+        setLoading(false);
+        console.log(hotelsList);
     }, []);
 
-    const PAGE_SIZE = 5;
+    const Item = ({ title }) => (
+        <View style={styles.item}>
+            <Text style={styles.hotelsListText}>{title}</Text>
+        </View>
+    );
 
-    const handleSave = async (item) => {
-        await AsyncStorage.setItem('hotel', JSON.stringify(item));
+    const ListHeaderComponent = () => {
+        <View>
+            <Text>Hotels List</Text>
+        </View>
     }
-
-    const hotelExists = async () => {
-        let result = await AsyncStorage.getItem('hotel');
-        console.log(result);
-    }
-    hotelExists();
 
     return (
         <>
-            {isVisible &&
-                <ScrollView style={styles.container} ref={formRef}>
-                    <View style={styles.hotelsList}>
-                        {hotelsList && hotelsList.map((item, index) => {
-                            return (
-                                <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'flex-start', textAlign: 'left', flexWrap: 'wrap', gap: 20, borderBottomWidth: 1, width: '10)%' }}>
+            <View style={{ flexGrow: 1, backgroundColor: 'lightgreen' }}>
+
+            </View>
 
 
-                                    <Text style={styles.hotelsListText}>{item.name}</Text>
-                                    <View style={{ flexDirection: 'row', gap: 20 }}>
-                                        <HotelModal />
-                                        <TouchableOpacity onPress={() => handleSave(item)} style={{ backgroundColor: 'lightgrey', paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, }}>
-                                            <Text>Save</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            );
-                        })}
+            <ScrollView style={styles.container} ref={formRef}>
+                <FlatList
+                    data={hotelsList}
+                    renderItem={({ item }) => <Item title={item.name} />}
+                    ListHeaderComponent={ListHeaderComponent}
+                    windowSize={10}
+                />
+                <Text style={styles.headerText}>Find a Hotel</Text>
+                <>
+                    <View style={styles.firstRow}>
+                        <City sendDataToParent={handleDataFromChild} />
+
                     </View>
+                    <View style={styles.secondRow}>
+                        <FromDate sendDataToParent={handleDataFromChild} />
+                        <ToDate sendDataToParent={handleDataFromChild} />
 
-                    <Text style={styles.headerText}>Find a Hotel</Text>
-
-
-
-                    <>
-                        <View style={styles.firstRow}>
-                            <City sendDataToParent={handleDataFromChild} />
-
-                        </View>
-                        <View style={styles.secondRow}>
-                            <FromDate sendDataToParent={handleDataFromChild} />
-                            <ToDate sendDataToParent={handleDataFromChild} />
-
-                        </View>
-                        <View style={styles.thirdRow}>
-                            <NoOfGuests sendDataToParent={handleDataFromChild} />
-                            <NoOfRooms sendDataToParent={handleDataFromChild} />
-                        </View>
-                        <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
-                            <Text style={styles.searchText}>Search</Text>
-                        </TouchableOpacity>
-                    </>
-
-                </ScrollView>
-            }
-            {!isVisible &&
-        
-                <> 
-                {hotelsList.map((item, index) => { 
-                    console.log(item.name);
-                    return(
-                        <View>
-                            <Text>{item.name}</Text>
-                        </View>
-                    )
-                })}
+                    </View>
+                    <View style={styles.thirdRow}>
+                        <NoOfGuests sendDataToParent={handleDataFromChild} />
+                        <NoOfRooms sendDataToParent={handleDataFromChild} />
+                    </View>
+                    <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
+                        <Text style={styles.searchText}>Search</Text>
+                    </TouchableOpacity>
                 </>
-            }
+
+            </ScrollView>
+
 
         </>
     );
@@ -178,7 +161,8 @@ const styles = StyleSheet.create({
         flex: 0,
         backgroundColor: 'lightgreen',
         gap: 10,
-
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     firstRow: {
         display: 'flex',
@@ -226,6 +210,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 10,
+        alignSelf: 'flex-start',
 
     },
     searchText: {
