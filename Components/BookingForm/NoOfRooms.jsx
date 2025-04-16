@@ -7,7 +7,7 @@ export default function NoOfRooms() {
     
     const handleTextChange = (e) => { 
         // Send data to parent component
-        sendDataToParent({ noOfRooms: e, component: 'NoOfRooms'});
+        sendDataToParent({ noOfRooms: e });
     }
 
     return (

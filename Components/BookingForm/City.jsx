@@ -12,8 +12,9 @@ import { BookingFormContext } from '../Home';
 export default function City({ sendDataToParent }) {
     const [loading, setLoading] = useState(false);
     const [suggestionsList, setSuggestionsList] = useState(null);
-    const [seletctedItem, setSelectedItem] = useState();
+    const [selectedItem, setSelectedItem] = useState();
     const searchRef = useRef(null);
+    const [entityId, setEntityId] = useState('');
 
     const getCity = async (q) => {
         const options = {
@@ -28,23 +29,29 @@ export default function City({ sendDataToParent }) {
 
         try {
             const response = await axios.request(options);
-            console.log(response);
-         
+            //console.log(response);
+
             setCityData(response.data);
             setSuggestionsList(response.data);
         } catch (error) {
-            console.error(error);
+            //console.error(error);
         }
     }
 
-    const handleGetCity = () => {
-        getCity();
 
+    const handleSelectItem = (item) => {
+        // Pass data to parent component
+        try {
+            sendDataToParent(item);
+            console.log(item);
+        } catch (error) {
+            console.log(error); // For some reason the component looses its value if this line is missing.
+        }
     }
 
     const getSuggestions = useCallback(async (q) => {
 
-        console.log(q);
+        //console.log(q);
         if (q.length < 3) {
             setSuggestionsList(null);
         }
@@ -56,19 +63,21 @@ export default function City({ sendDataToParent }) {
             },
             params: { query: q },
         }).then((res) => {
-            console.log(res.data.data);
             const formattedSuggestions = res.data.data.map((item, index) => ({
                 id: index.toString(),
                 title: item?.entityName,
                 entityId: item?.entityId,
+                component: 'City', // Custom parameter passed to list 
             }));
             setSuggestionsList(formattedSuggestions);
-       
-        }).then((err) => console.error(err));
+
+        }).then((err) => {
+            //console.error(err)
+        });
     }, []);
 
     useEffect(() => {
-        console.log(suggestionsList);
+
     }, []);
 
     // Mention the render issue in the report.  If you have a View element around external components they won't render.
@@ -105,9 +114,11 @@ export default function City({ sendDataToParent }) {
                     }
                 </Text>}
                 onSelectItem={(item) => {
-                    setSelectedItem(item?.title);
-                    // Here we move on to the next form fields.
-                    sendDataToParent({ city: item?.title, component: 'City', entityId: item?.entityId});
+                    if (item) {
+                        handleSelectItem(item);
+                    } else {
+                        console.warn("No item selected");
+                    }
                 }}
             />
 

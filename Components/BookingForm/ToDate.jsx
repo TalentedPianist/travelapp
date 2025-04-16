@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Button, Icon } from 'react-native';
 import { TextInput, PaperProvider } from 'react-native-paper';
 import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-
+import moment from 'moment';
 
 export default function ToDate({ sendDataToParent }) {
 
-    const [toDate, setToDate] = useState(new Date()) // Initializes with the current date
+    const [toDate, setToDate] = useState(); // Initializes with the current date
     const [showPicker, setShowPicker] = useState(false);
-    const [date, setShowDate] = useState(new Date(1598051730000));
 
     const showMode = (currentMode) => {
         DateTimePickerAndroid.open({
@@ -28,13 +27,10 @@ export default function ToDate({ sendDataToParent }) {
     }
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
-        setShowPicker(false);
+        const currentDate = moment(selectedDate).format('YYYY-MM-DD');
         setToDate(currentDate);
-        console.log('ToDate sendDataToParent:', { date: currentDate, component: 'ToDate' });
-        if (typeof sendDataToParent === 'function') {
-            sendDataToParent({ toDate: currentDate.toISOString().split('T')[0], component: 'ToDate' });
-        }
+        sendDataToParent({ toDate: currentDate, component: 'ToDate' });
+
     };
 
     return (
@@ -55,10 +51,10 @@ export default function ToDate({ sendDataToParent }) {
                     left={<TextInput.Icon icon="calendar" />}
                     onFocus={showDatePicker} // Show the date picker when input is focused
                     onPress={showDatePicker} // Show the date picker when field is pressed
-                    value={toDate.toDateString()}
+                    value={moment(toDate).format('YYYY-MM-DD')}
                     style={styles.textInput}
                 />
-              
+
             </View>
         </>
     );
@@ -67,7 +63,7 @@ export default function ToDate({ sendDataToParent }) {
 const styles = StyleSheet.create({
     textInput: {
         backgroundColor: 'orange',
-   
+
     },
     containerStyle: {
         flex: 1,

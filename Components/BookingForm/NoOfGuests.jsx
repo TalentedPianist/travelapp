@@ -7,7 +7,7 @@ export default function NoOfGuests({ sendDataToParent }) {
 
     const handleTextChange = (e) => { 
         // Send to parent component
-        sendDazaToParent({ noOfGuests: e, component: 'NoOfGuests' });
+        sendDazaToParent({ noOfGuests: e });
     }
 
     return (

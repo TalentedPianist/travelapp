@@ -13,6 +13,18 @@ import { PaperProvider } from 'react-native-paper';
 import Profile from './Components/User/Profile/Profile';
 import Register from './Components/User/Register/Register';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+AsyncStorage.getAllKeys((err, keys) => { 
+    AsyncStorage.multiGet(keys, (error, stores) => { 
+        let asyncStorage = {}
+        stores.map((result, i, store) => { 
+            asyncStorage[store[i][0]] = store[i][1]
+        });
+        //console.log(asyncStorage);
+    });
+});
+
 
 function HomeScreen() {
     return (

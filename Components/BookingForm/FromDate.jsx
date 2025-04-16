@@ -5,6 +5,7 @@ import { TextInput, PaperProvider } from 'react-native-paper';
 import * as Calendar from 'expo-calendar';
 import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { Dropdown } from 'react-native-paper-dropdown';
+import moment from 'moment';
 
 export default function FromDate({ sendDataToParent }) {
 
@@ -32,10 +33,10 @@ export default function FromDate({ sendDataToParent }) {
     }
 
     const onChange = (event, selectedDate) => { 
-        const currentDate = selectedDate;
+        const currentDate = moment(selectedDate).format('YYYY-MM-DD');
         setShowPicker(false);
-        setFromDate(currentDate);
-        sendDataToParent({ fromDate: currentDate.toDateString(), component: 'FromDate' });
+        setFromDate(new Date(currentDate));
+        sendDataToParent({ fromDate: currentDate, component: 'FromDate' });
     };
 
     return (
@@ -45,7 +46,7 @@ export default function FromDate({ sendDataToParent }) {
                 {showPicker && (
                     <RNDateTimePicker 
                     design="material"
-                    value={fromDate.toDateString()}
+                    value={fromDate}
                     mode="date" // Specify the mode (date or time)
                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                     onChange={onChange} 
@@ -58,7 +59,7 @@ export default function FromDate({ sendDataToParent }) {
                     style={styles.textInput}
                     onFocus={showDatePicker} // Show the picker when the input is focused
                     onPress={showDatePicker} // Show the date picker when field is pressed
-                    value={fromDate.toDateString()} // Display the selected date in the input
+                    value={moment(fromDate).format('YYYY-MM-DD')} // Display the selected date in the input
                 />
               
             </View>
