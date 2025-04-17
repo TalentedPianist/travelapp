@@ -1,66 +1,61 @@
-import { FlatList, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import HotelModal from './HotelModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function HotelsList(props) {
     const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
 
-    const Item = ({ title }) => (
-        <View style={styles.item}>
-            <View style={styles.buttonsView}>
-            <Text style={styles.hotelsListText}>{title}</Text>
-            <TouchableOpacity style={styles.viewButton}>
-                <Text>View</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.saveButton}>
-                <Text>Save</Text>
-            </TouchableOpacity>
-            </View>
-        </View>
-    );
-
-    const ListHeaderComponent = () => {
-        <View>
-            <Text>Hotels List</Text>
-        </View>
+    const handleSave = async (item) => {
+        try {
+            await AsyncStorage.setItem('hotel', JSON.stringify(item));
+            const result = JSON.parse(await AsyncStorage.getItem('hotel')); // JSON.parse() is very important!!! Mention in report.
+            console.log(result.name);
+            navigator.navigate('/Home');
+        } catch (e) {
+            console.log(e);
+        }
     }
 
-    const ItemSeparatorView = () => {
-        return (
-            // Flat list item separator
-            <View
-                style={{
-                    height: 0.5,
-                    width: '100%',
-                    backgroundColor: '#c8c8c8'
-                }}
-            />
-        );
-    }
 
-    const renderFooter = () => {
-        return (
-            // Footer view with Load More button
-            <View styles={styles.footer}>
-
-            </View>
-        );
-    }
-
-   
     return (
         <>
-           
 
-            <FlatList
-                data={props.data}
-                renderItem={({ item }) => <Item title={item.name} />}
-                ListHeaderComponent={ListHeaderComponent}
-                windowSize={10}
-                onReachedThreshold={0.3}
-                ItemSeparatorComponent={ItemSeparatorView}
-                ListFooterComponent={renderFooter}
-            />
+            {props.data &&
+                <FlatList
+                    data={props.data}
+     
+                    renderItem={({ item, index }) => {
+                        return (
+                            <View>
+
+                                <Text style={styles.hotelsListText}>{item.name}</Text>
+                                <View style={styles.buttonsView}>
+                                    <TouchableOpacity>
+                                        <Text style={styles.viewButton}>View</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => handleSave(item)}>
+                                        <Text style={styles.saveButton}>Save</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
+                    }}
+                    ListHeaderComponent={() => {
+                        return (
+                            <View>
+
+                            </View>
+                        );
+                    }}
+                    windowSize={10}
+                    onReachedThreshold={0.3}
+
+                />
+            }
         </>
     );
 }
@@ -68,17 +63,16 @@ export default function HotelsList(props) {
 const styles = StyleSheet.create({
     hotelsList: {
         backgroundColor: 'lightgreen',
-        display: 'flex',
-        justifyContent: 'space-evenly',
         height: '100%',
         flex: 1,
         paddingLeft: 20,
         paddingTop: 20,
         paddingBottom: 20,
         paddingRight: 20,
+        alignItems: 'center',
     },
     hotelsListText: {
-        fontSize: 18,
+        fontSize: 20,
         marginRight: 30,
         marginTop: 10,
         marginBottom: 10,
@@ -91,35 +85,32 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 30,
+
+
     },
     item: {
-        display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
-        marginRight: 10,
         flexWrap: 'wrap',
-
+        flex: 0,
+        alignItems: 'center',
     },
     footer: {
         display: 'flex',
     },
-    buttonsView: { 
+    buttonsView: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        flexWrap: 'inherit',
-        alignSelf: 'flex-start',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
+        gap: 10,
+        alignItems: 'center',
     },
-    saveButton: { 
-        backgroundColor: 'lightgray', 
-        paddingTop: 10, 
-        paddingLeft: 10, 
-        paddingRight: 10, 
+    saveButton: {
+        backgroundColor: 'lightgray',
+        paddingTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
         paddingBottom: 10,
         alignSelf: 'flex-start',
+    },
+    headerText: {
+        fontSize: 38,
     }
 })

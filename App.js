@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MyMenu from './MyMenu';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import AboutUs from './Components/AboutUs';
 import Login from './Components/User/Login/Login';
 import Home from './Components/Home';
@@ -16,17 +16,25 @@ import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-d
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
+const getAllItems = async () => {
+    try {
+        const keys = await AsyncStorage.getAllKeys();
+        const items = await AsyncStorage.multiGet(keys);
 
-AsyncStorage.getAllKeys((err, keys) => { 
-    AsyncStorage.multiGet(keys, (error, stores) => { 
-        let asyncStorage = {}
-        stores.map((result, i, store) => { 
-            asyncStorage[store[i][0]] = store[i][1]
-        });
-        console.log(asyncStorage);
-    });
-});
+        // Convert stored values from string to JSON (if applicable);
+        const parsedItems = items.map(([key, value]) => ({
+            key,
+            value: value ? JSON.parse(value) : null,
+        }));
 
+        console.log(parsedItems);
+        return parsedItems;
+    } catch (error) {
+        console.error('Error retrieving items:', error);
+    }
+};
+
+getAllItems();
 
 function HomeScreen() {
     return (
@@ -67,7 +75,7 @@ function RegisterScreen() {
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
-    const navigation = useNavigation();
+
 
     return (
         <>
@@ -75,8 +83,8 @@ function RootStack() {
                 screenOptions={{
                     header: () => (
                         <View style={styles.headerStyles}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                            <FontAwesome5 name="home" size={70} color="black" />
+                            <TouchableOpacity onPress={() => navigation.navigate('/')}>
+                                <FontAwesome5 name="home" size={70} color="black" />
                             </TouchableOpacity>
                             <MyMenu />
                         </View>
@@ -108,7 +116,9 @@ function RootStack() {
                     component={RegisterScreen}
                     options={{ title: 'Register' }}
                 />
+                
             </Stack.Navigator>
+    
         </>
     );
 }
@@ -121,18 +131,20 @@ export default function App() {
 
     return (
         <>
-            <AutocompleteDropdownContextProvider>
-                <PaperProvider>
-                    <NavigationContainer
-                        ref={navigationRef}
-                        onReady={() => {
-                            isReadyRef.current = true;
-                        }}
-                    >
+            <NavigationContainer
+                ref={navigationRef}
+                onReady={() => {
+                    isReadyRef.current = true;
+                }}
+            >
+              
+
+                <AutocompleteDropdownContextProvider>
+                    <PaperProvider>
                         <RootStack />
-                    </NavigationContainer>
-                </PaperProvider>
-            </AutocompleteDropdownContextProvider>
+                    </PaperProvider>
+                </AutocompleteDropdownContextProvider>
+            </NavigationContainer>
         </>
     );
 }

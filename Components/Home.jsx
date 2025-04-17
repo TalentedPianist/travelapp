@@ -13,9 +13,11 @@ import moment from 'moment';
 import HotelModal from './BookingForm/HotelModal';
 import HotelsList from './BookingForm/HotelsList';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Home({ sendDataToParent }) {
+    const navigation = useNavigation();
 
     const [city, setCity] = useState("");
     const [fromDate, setFromDate] = useState(); // Set date in case user submits without selecting 
@@ -29,6 +31,8 @@ export default function Home({ sendDataToParent }) {
     const [hotelsList, setHotelsList] = useState([]); // Be sure to define the array correctly!
     const [isVisible, setIsVisible] = useState(true);
     const [rapid, setRapid] = useState([]);
+    const [showForm, setShowForm] = useState(false);
+    const [hotel, setHotel] = useState([]);
 
     // Begin pagination variables
     const [totalPages, setTotalPages] = useState(0);
@@ -79,7 +83,7 @@ export default function Home({ sendDataToParent }) {
         try {
             //setLoading(true);
             const response = await fetch(apiUrl, options);
-           
+
 
             const data = await response.json(); // This line is the key to getting it working.  Explain in report that it needs await.  Fetch seems to be faster too.
             //console.log(data.results.hotelCards);
@@ -89,42 +93,63 @@ export default function Home({ sendDataToParent }) {
         }
     }
 
+    async function getAllKeys() {
+        const allKeys = await AsyncStorage.getAllKeys();
+        console.log(allKeys);
+    };
+
+    async function getHotel() {
+        const h = await AsyncStorage.getItem('hotel');
+        setHotel(JSON.parse(h));
+    }
 
     useEffect(() => {
-  
-        console.log(hotelsList);
+        getAllKeys();
+        getHotel();
     }, []);
 
-    
-   
+
+
 
     return (
         <>
-          
+
             <ScrollView style={styles.container} ref={formRef}>
-                { loading && <ActivityIndicator animated={true} size="large" /> }
-                <HotelsList data={hotelsList} />
+                {loading && <ActivityIndicator animated={true} size="large" />}
+                {hotelsList && <HotelsList data={hotelsList} navigation={navigation} />}
 
-                <Text style={styles.headerText}>Find a Hotel</Text>
+                {hotel ?
+                    <>
+                        <Text>{hotel.name}</Text>
+                    </>
+                    :
+
+                    <>
+                        <Text style={styles.headerText}>Find a Hotel</Text>
+                        <>
+                            <View style={styles.firstRow}>
+                                <City sendDataToParent={handleDataFromChild} />
+
+                            </View>
+                            <View style={styles.secondRow}>
+                                <FromDate sendDataToParent={handleDataFromChild} />
+                                <ToDate sendDataToParent={handleDataFromChild} />
+
+                            </View>
+                            <View style={styles.thirdRow}>
+                                <NoOfGuests sendDataToParent={handleDataFromChild} />
+                                <NoOfRooms sendDataToParent={handleDataFromChild} />
+                            </View>
+                            <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
+                                <Text style={styles.searchText}>Search</Text>
+                            </TouchableOpacity>
+                        </>
+                    </>
+                }
                 <>
-                    <View style={styles.firstRow}>
-                        <City sendDataToParent={handleDataFromChild} />
 
-                    </View>
-                    <View style={styles.secondRow}>
-                        <FromDate sendDataToParent={handleDataFromChild} />
-                        <ToDate sendDataToParent={handleDataFromChild} />
-
-                    </View>
-                    <View style={styles.thirdRow}>
-                        <NoOfGuests sendDataToParent={handleDataFromChild} />
-                        <NoOfRooms sendDataToParent={handleDataFromChild} />
-                    </View>
-                    <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
-                        <Text style={styles.searchText}>Search</Text>
-                    </TouchableOpacity>
                 </>
-
+                }
             </ScrollView>
 
 

@@ -14,17 +14,17 @@ const LoggedInModal = () => {
         setModalVisible(!isModalVisible);
     }
 
-    const handleLogout = async () => { 
-        try { 
+    const handleLogout = async () => {
+        try {
             //await AsyncStorage.removeItem("user");
-        } catch (error) { 
+        } catch (error) {
             console.error("Error removing user: ", error);
         }
     }
 
     return (
         <>
-           
+
 
             <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="menu" size={70} color="black" />
@@ -43,7 +43,9 @@ const LoggedOutModal = () => {
 
     return (
         <>
-            
+            <TouchableOpacity onPress={toggleModal}>
+                <MaterialCommunityIcons name="menu" size={70} color="black" />
+            </TouchableOpacity>
 
         </>
     );
@@ -54,16 +56,16 @@ export default function MyMenu() {
 
     // useEffect hook solves the problem of the component rendering multiple times (yesterday)
     useEffect(() => {
-        const fetchUser = async () => { 
-            try { 
+        const fetchUser = async () => {
+            try {
                 const storedUser = await AsyncStorage.getItem("user");
                 setUser(storedUser ? JSON.parse(storedUser) : null);
-            } catch (error)  {
+            } catch (error) {
                 console.error(error);
             }
         }
         fetchUser();
-        
+
     }, []);
 
     return user ? <LoggedInModal /> : <LoggedOutModal />;
