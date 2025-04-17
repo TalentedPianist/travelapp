@@ -16,25 +16,6 @@ import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-d
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-const getAllItems = async () => {
-    try {
-        const keys = await AsyncStorage.getAllKeys();
-        const items = await AsyncStorage.multiGet(keys);
-
-        // Convert stored values from string to JSON (if applicable);
-        const parsedItems = items.map(([key, value]) => ({
-            key,
-            value: value ? JSON.parse(value) : null,
-        }));
-
-        console.log(parsedItems);
-        return parsedItems;
-    } catch (error) {
-        console.error('Error retrieving items:', error);
-    }
-};
-
-getAllItems();
 
 function HomeScreen() {
     return (
@@ -75,7 +56,7 @@ function RegisterScreen() {
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
-
+    const navigation = useNavigation();
 
     return (
         <>
@@ -123,11 +104,34 @@ function RootStack() {
     );
 }
 
+const getAllKeys = async () => { 
+    let keys = [];
+    try { 
+        keys = await AsyncStorage.getAllKeys();
+    } catch (e) { 
+        console.log(e);
+    }
+    console.log(keys);
+}
+
+const clearAll = async () => { 
+    try { 
+        await AsyncStorage.clear();
+    } catch (e) {
+        console.log(e);
+    }
+    console.log('Done.');
+
+}
 
 export default function App() {
     const navigationRef = useRef();
     const isReadyRef = useRef(false);
 
+    useEffect(() => {
+        
+        getAllKeys(); 
+    }, []);
 
     return (
         <>

@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         gap: 20,
         position: 'relative',
         zIndex: 5000,
-        backgroundColor: 'orange',
+        backgroundColor: 'beige',
         paddingLeft: 20,
         paddingTop: 20,
         height: '100%',

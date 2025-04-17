@@ -26,7 +26,6 @@
     "amadeus": "^11.0.0",
     "axios": "^1.8.4",
     "axios-oauth-client": "^2.2.0",
-    "bcryptjs": "^3.0.2",
     "expo": "~52.0.43",
     "expo-auth-session": "~6.0.3",
     "expo-calendar": "~14.0.6",

@@ -104,7 +104,7 @@ export default function Home({ sendDataToParent }) {
     }
 
     useEffect(() => {
-        getAllKeys();
+
         getHotel();
     }, []);
 
@@ -120,12 +120,16 @@ export default function Home({ sendDataToParent }) {
 
                 {hotel ?
                     <>
-                        <Text>{hotel.name}</Text>
+                        <View>
+                            <Text>{hotel.name}</Text>
+                        </View>
                     </>
                     :
 
                     <>
-                        <Text style={styles.headerText}>Find a Hotel</Text>
+                        <View>
+                            <Text style={styles.headerText}>Find a Hotel</Text>
+                        </View>
                         <>
                             <View style={styles.firstRow}>
                                 <City sendDataToParent={handleDataFromChild} />

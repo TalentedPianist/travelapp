@@ -4,43 +4,86 @@ import React, { useState, useRef } from 'react';
 import { compare, hash } from 'react-native-simple-bcrypt';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { TextInput, HelperText, Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import * as Crypto from 'expo-crypto';
 
 export default function Register() {
-    const [formData, setFormData] = useState({ 
+    const getAllKeys = async () => {
+        let keys = [];
+        try {
+            keys = await AsyncStorage.getAllKeys();
+        } catch (e) {
+            console.log(e);
+        }
+        console.log(keys);
+    }
+
+    const getUser = async () => {
+        try {
+            let user = await AsyncStorage.getItem('user');
+            console.log(user);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+
+    const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
     });
     const [errors, setErrors] = useState({});
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
+        //const navigation = useNavigation(); // Create navigation variable - used to redirect the user.
+
         const validationErrors = validateForm(formData);
         if (Object.keys(validationErrors).length === 0) {
+            // No errors have been found
             // Form submission logic here
             setErrors({}); // Clears error array if all fields are valid - better UI experience
-            console.log(formData.password);
+
+            const password = await Crypto.digestStringAsync(
+                Crypto.CryptoDigestAlgorithm.SHA256, formData.password); // Encrypt password using expo-crypto
+
+            let user = await AsyncStorage.getItem('user');
+            try {
+                if (user !== null) {
+                    alert("User already exists!");
+                } else {
+                    await AsyncStorage.setItem('user', JSON.stringify({ 'name': formData.name, 'email': formData.email, 'password': password }));
+                    alert('User registration successful!');
+                    navigation.navigate('Login');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+
         } else {
             setErrors(validationErrors);
         }
+
     };
 
-    const validateForm = (data) => { 
+    const validateForm = (data) => {
         let errors = {};
-        if (!data.name || data.name.trim() === "") { 
+        if (!data.name || data.name.trim() === "") {
             errors.name = "Name is required";
         }
-        if (!data.email || data.email.trim() === "") { 
+        if (!data.email || data.email.trim() === "") {
             errors.email = "Email is required";
-        } else if (!isValidEmail(data.email)) { 
+        } else if (!isValidEmail(data.email)) {
             errors.email = "Invalid email format";
         }
-        if (!data.password || data.password.trim() === "") { 
+        if (!data.password || data.password.trim() === "") {
             errors.password = "Password is required";
         }
         return errors;
     }
 
-    const isValidEmail = (email) => { 
+    const isValidEmail = (email) => {
         // basic email validation
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
@@ -51,46 +94,38 @@ export default function Register() {
     return (
         <>
             <View style={styles.containerStyles}>
-                <SafeAreaProvider>
-                    <SafeAreaView>
-                        <Text style={styles.headerText}>Register</Text>
 
-                        <TextInput
-                            label="Name"
-                            left={<TextInput.Icon icon="account" />}
-                            style={styles.inputStyle}
-                            name="name"
-                            onChangeText={(text) => setFormData({ ...formData, name: text })}
-                        />
-                        {errors.name && <Text>{errors.name}</Text>}
+                <Text style={styles.headerText}>Register</Text>
 
-                        <TextInput
-                            label="Email"
-                            left={<TextInput.Icon icon="email" />}
-                            style={styles.inputStyle}
-                            name="email"
-                            onChangeText={(text) => setFormData({ ...formData, email: text})}
-                        />
-                        {errors.email && <Text>{errors.email}</Text>}
+                <TextInput
+                    label="Name"
+                    left={<TextInput.Icon icon="account" />}
+                    style={styles.inputStyle}
+                    name="name"
+                    onChangeText={(text) => setFormData({ ...formData, name: text })}
+                />
+                {errors.name && <Text>{errors.name}</Text>}
 
-                        <TextInput
-                            label="Password"
-                            left={<TextInput.Icon icon="eye" />}
-                            style={styles.inputStyle}
-                            secureTextEntry={true}
-                            name="password"
-                            onChangeText={(text) => setFormData({ ...formData, password: text})}
-                        />
-                        {errors.password && <Text>{errors.password}</Text>}
+                <TextInput
+                    label="Email"
+                    left={<TextInput.Icon icon="email" />}
+                    style={styles.inputStyle}
+                    name="email"
+                    onChangeText={(text) => setFormData({ ...formData, email: text })}
+                />
+                {errors.email && <Text>{errors.email}</Text>}
 
-                        <TouchableOpacity onPress={handleRegister} style={styles.buttonStyle}>
-                            <Text style={styles.buttonText}>Register</Text>
-                        </TouchableOpacity>
+                <TextInput
+                    label="Password"
+                    left={<TextInput.Icon icon="eye" />}
+                    style={styles.inputStyle}
+                    secureTextEntry={true}
+                    name="password"
+                    onChangeText={(text) => setFormData({ ...formData, password: text })}
+                />
+                {errors.password && <Text>{errors.password}</Text>}
 
-
-                    </SafeAreaView>
-                </SafeAreaProvider>
-
+                <Button style={styles.buttonStyle} mode="outlined" onPress={handleRegister}>Register</Button>
             </View>
         </>
     );

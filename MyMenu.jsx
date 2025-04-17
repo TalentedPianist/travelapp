@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Icon } from 'react-native-paper';
 import { useState, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, View, Button, Text, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
@@ -24,7 +25,13 @@ const LoggedInModal = () => {
 
     return (
         <>
-
+            <View>
+                <Modal isVisible={isModalVisible}>
+                    <View style={{ flex: 1 }}>
+                        <Text>Hello!</Text>
+                    </View>
+                </Modal>
+            </View>
 
             <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="menu" size={70} color="black" />
@@ -43,6 +50,26 @@ const LoggedOutModal = () => {
 
     return (
         <>
+            <Modal isVisible={isModalVisible}>
+                <View style={{ flex: 1 }}>
+                    <TouchableOpacity onPress={toggleModal}>
+                        <Icon name="close" size={30} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.modalText}>Home</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPess={() => navigation.navigate('About')}>
+                        <Text style={styles.modalText}>About</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <Text style={styles.modalText}>Register</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                        <Text style={styles.modalText}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+
             <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="menu" size={70} color="black" />
             </TouchableOpacity>
@@ -68,7 +95,7 @@ export default function MyMenu() {
 
     }, []);
 
-    return user ? <LoggedInModal /> : <LoggedOutModal />;
+    return <LoggedOutModal />;
 }
 
 
