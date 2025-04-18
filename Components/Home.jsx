@@ -113,10 +113,11 @@ export default function Home({ sendDataToParent }) {
 
     return (
         <>
-
+            {hotelsList && <HotelsList data={hotelsList} navigation={navigation} />}
+            
             <ScrollView style={styles.container} ref={formRef}>
                 {loading && <ActivityIndicator animated={true} size="large" />}
-                {hotelsList && <HotelsList data={hotelsList} navigation={navigation} />}
+
 
                 {hotel ?
                     <>
@@ -150,10 +151,7 @@ export default function Home({ sendDataToParent }) {
                         </>
                     </>
                 }
-                <>
 
-                </>
-                }
             </ScrollView>
 
 

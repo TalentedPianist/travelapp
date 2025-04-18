@@ -1,8 +1,6 @@
 import GithubAuth from '../Login/GithubAuth';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState, useRef } from 'react';
-import { compare, hash } from 'react-native-simple-bcrypt';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -37,13 +35,10 @@ export default function Register() {
     const [errors, setErrors] = useState({});
 
     const handleRegister = async () => {
-        //const navigation = useNavigation(); // Create navigation variable - used to redirect the user.
-
+        const navigation = useNavigation(); // Create navigation variable - used to redirect the user.
+        console.log('Register button clicked');
         const validationErrors = validateForm(formData);
-        if (Object.keys(validationErrors).length === 0) {
-            // No errors have been found
-            // Form submission logic here
-            setErrors({}); // Clears error array if all fields are valid - better UI experience
+        if (Object.keys(errors).length === 0) {
 
             const password = await Crypto.digestStringAsync(
                 Crypto.CryptoDigestAlgorithm.SHA256, formData.password); // Encrypt password using expo-crypto
@@ -63,7 +58,7 @@ export default function Register() {
 
         } else {
             setErrors(validationErrors);
-        }
+         }
 
     };
 
@@ -104,7 +99,7 @@ export default function Register() {
                     name="name"
                     onChangeText={(text) => setFormData({ ...formData, name: text })}
                 />
-                {errors.name && <Text>{errors.name}</Text>}
+                <View>{errors.name && <Text>{errors.name}</Text>}</View>
 
                 <TextInput
                     label="Email"
@@ -113,7 +108,7 @@ export default function Register() {
                     name="email"
                     onChangeText={(text) => setFormData({ ...formData, email: text })}
                 />
-                {errors.email && <Text>{errors.email}</Text>}
+                <View>{errors.email && <Text>{errors.email}</Text>}</View>
 
                 <TextInput
                     label="Password"
@@ -123,9 +118,11 @@ export default function Register() {
                     name="password"
                     onChangeText={(text) => setFormData({ ...formData, password: text })}
                 />
-                {errors.password && <Text>{errors.password}</Text>}
+                <View>{errors.password && <Text>{errors.password}</Text>}</View>
 
-                <Button style={styles.buttonStyle} mode="outlined" onPress={handleRegister}>Register</Button>
+                <TouchableOpacity onPress={handleRegister} style={styles.buttonStyle}>
+                    <Text style={styles.textStyles}>Register</Text>
+                </TouchableOpacity>
             </View>
         </>
     );

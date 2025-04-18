@@ -4,7 +4,6 @@ import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { Button, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import useSessionStore from '../../../useSessionStore';
 
 // https://react-native-async-storage.github.io/async-storage/docs/install/#android--ios
 
@@ -76,7 +75,7 @@ export default function GithubAuth() {
 
             // Save user data to AsyncStorage
             await AsyncStorage.setItem('user', JSON.stringify(data));
-            // Add user to Zustand state
+            
             
 
         } catch (e) {

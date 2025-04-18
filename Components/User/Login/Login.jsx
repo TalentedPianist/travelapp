@@ -1,86 +1,90 @@
 import GithubAuth from './GithubAuth';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState, useRef } from 'react';
-import { compare, hash } from 'react-native-simple-bcrypt';
+import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { TextInput, HelperText, Button } from 'react-native-paper';
-import { Controller, useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import * as Crypto from 'expo-crypto';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import useAuthStore from '../../../zustand/useAuthStore';
 
-const isValidName = (name) => name.trim() === '';
-const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
-const isStrongPassword = (password) => password.length >= 6 && /\d/.test(password);
+const getUser = async () => { 
+    const user = await AsyncStorage.getItem('user');
+    return user ? JSON.parse(user) : [];
+}
 
 export default function Login() {
+   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+   const login = useAuthStore(state => state.login);
+
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
     const [errors, setErrors] = useState({});
 
+    
+    const handleLogin = async () => {
 
-    const handleLogin = () => {
-        const validationErrors = validateForm(formData);
-        if (Object.keys(validationErrors).length === 0) {
-            // Form submission logic here
-            setErrors({}); // Clear error array if all fields are valid - better UI experience
-            console.log(formData.password);
-        } else {
-            setErrors(validationErrors);
+        const password = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256, formData.password);
+
+        try {
+            let user = JSON.parse(await AsyncStorage.getItem('user')); // Declare user variable, parse JSON string received from AsyncStorage
+
+            if (formData.email === user.email && password === user.password) {
+                alert("User successfully authenticated!");
+                login();
+            } else {
+                alert("Email and password combination not recognized!");
+            }
+
+        } catch (error) {
+            console.error(error);
         }
+
     };
+    
+    useEffect(() => { 
+        console.log('Current zustand state:', useAuthStore.getState());
+    }, []);
+       
 
-    const validateForm = (data) => {
-        if (!data.email || data.email.trim() === "") {
-            errors.email = "Email is required";
-        } else if (!isValidEmail(data.email)) {
-            errors.email = "Invalid email format";
-        }
-        if (!data.password || data.password.trim() === "") {
-            errors.password = "Password is required";
-        }
-        return errors;
-    }
+    return (
+        <>
+            <View style={styles.containerStyles}>
+                {isLoggedIn ? (
+                    <>
+                       
+                    </>
+                ) : (
+                    <>
+                    <View>
+                        <Text style={styles.headerText}>Login</Text>
 
-
-
-// https://static.enapter.com/rn/icons/material-community.html
-// https://medium.com/@rutikpanchal121/building-a-robust-form-in-react-native-with-react-hook-form-and-zod-for-validation-7583678970c3
-return (
-    <>
-        <View style={styles.containerStyles}>
-            <SafeAreaProvider>
-                <SafeAreaView>
-                    <Text style={styles.headerText}>Login</Text>
-
-                    <TextInput 
-                        label="Email"
-                        left={<TextInput.Icon icon="account" />}
-                        style={styles.inputStyle}
-                        onChangeText={(text) => setFormData({ ...formData, name: text })}
-                    />
-                    {errors.email && <Text>{errors.email}</Text>}
-
-                    <TextInput
-                        label="Password"
-                        left={<TextInput.Icon icon="eye" />}
-                        style={styles.inputStyle}
-                        onChangeText={(text) => setFormData({ ...formData, password: text})}
-                    />
-                    {errors.password && <Text>{errors.password}</Text>}
-
-                    <TouchableOpacity onPress={handleLogin} style={styles.buttonStyle}>
-                        <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
+                        <TextInput
+                            label="Email"
+                            left={<TextInput.Icon icon="account" />}
+                            style={styles.inputStyle}
+                            onChangeText={(text) => setFormData({ ...formData, email: text })}
+                        />
 
 
-                    <GithubAuth />
-                </SafeAreaView>
-            </SafeAreaProvider>
+                        <TextInput
+                            label="Password"
+                            left={<TextInput.Icon icon="eye" />}
+                            style={styles.inputStyle}
+                            onChangeText={(text) => setFormData({ ...formData, password: text })}
+                            secureTextEntry={true}
+                        />
 
-        </View>
-    </>
-);
+                        <Button style={styles.buttonStyle} mode="contained" textColor="black" buttonColor="yellow" onPress={handleLogin}>Login</Button>
+                        </View>
+                    </>
+                )}
+            </View>
+        </>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -118,6 +122,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         paddingLeft: 5,
         paddingRight: 5,
+        color: 'black',
     },
     buttonText: {
         fontSize: 24,

@@ -1,12 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Icon } from 'react-native-paper';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { TouchableOpacity, StyleSheet, View, Button, Text, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAuthStore from './zustand/useAuthStore';
 
 const LoggedInModal = () => {
+    const logout = useAuthStore(state => state.logout);
+
     const navigation = useNavigation();
 
     const [isModalVisible, setModalVisible] = useState(false);
@@ -15,12 +17,10 @@ const LoggedInModal = () => {
         setModalVisible(!isModalVisible);
     }
 
-    const handleLogout = async () => {
-        try {
-            //await AsyncStorage.removeItem("user");
-        } catch (error) {
-            console.error("Error removing user: ", error);
-        }
+    const handleLogout = () => {
+        console.log('Logging out...');
+        logout(); // Logout user
+        navigation.navigate('Login');
     }
 
     return (
@@ -28,7 +28,15 @@ const LoggedInModal = () => {
             <View>
                 <Modal isVisible={isModalVisible}>
                     <View style={{ flex: 1 }}>
-                        <Text>Hello!</Text>
+                        <TouchableOpacity onPress={toggleModal}>
+                            <MaterialCommunityIcons name="close" color="white" size={70} style={{ alignSelf: 'center' }} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                            <Text style={styles.modalText}>Profile</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleLogout}>
+                            <Text style={styles.modalText}>Logout</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
             </View>
@@ -53,7 +61,7 @@ const LoggedOutModal = () => {
             <Modal isVisible={isModalVisible}>
                 <View style={{ flex: 1 }}>
                     <TouchableOpacity onPress={toggleModal}>
-                        <Icon name="close" size={30} />
+                        <MaterialCommunityIcons name="close" size={70} color="white" style={{ alignSelf: 'center' }} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                         <Text style={styles.modalText}>Home</Text>
@@ -79,23 +87,19 @@ const LoggedOutModal = () => {
 }
 
 export default function MyMenu() {
-    const [user, setUser] = useState(null);
+    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
-    // useEffect hook solves the problem of the component rendering multiple times (yesterday)
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const storedUser = await AsyncStorage.getItem("user");
-                setUser(storedUser ? JSON.parse(storedUser) : null);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchUser();
-
-    }, []);
-
-    return <LoggedOutModal />;
+    return (
+        <>
+            <View>
+                {isLoggedIn ?
+                    <LoggedInModal />
+                    :
+                    <LoggedOutModal />
+                };
+            </View>
+        </>
+    );
 }
 
 
@@ -105,15 +109,18 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
+        gap: 10,
         alignItems: 'center',
+        alignSelf: 'center',
         width: '90%',
+        minHeight: '100%',
         backgroundColor: 'rgba(0,0,0,0.6)',
     },
     modalText: {
         color: 'white',
         fontSize: 32,
         textDecorationLine: 'underline',
-
+        alignSelf: 'center',
     },
     modalHeader: {
         fontSize: 38,
