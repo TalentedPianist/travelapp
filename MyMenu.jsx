@@ -32,10 +32,14 @@ const LoggedInModal = () => {
                             <MaterialCommunityIcons name="close" color="white" size={70} style={{ alignSelf: 'center' }} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                            <Text style={styles.modalText}>Profile</Text>
+                            <View>
+                                <Text style={styles.modalText}>Profile</Text>
+                            </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleLogout}>
-                            <Text style={styles.modalText}>Logout</Text>
+                            <View>
+                                <Text style={styles.modalText}>Logout</Text>
+                            </View>
                         </TouchableOpacity>
                     </View>
                 </Modal>
@@ -64,16 +68,24 @@ const LoggedOutModal = () => {
                         <MaterialCommunityIcons name="close" size={70} color="white" style={{ alignSelf: 'center' }} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                        <Text style={styles.modalText}>Home</Text>
+                        <View>
+                            <Text style={styles.modalText}>Home</Text>
+                        </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPess={() => navigation.navigate('About')}>
-                        <Text style={styles.modalText}>About</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('About')}>
+                        <View>
+                            <Text style={styles.modalText}>About</Text>
+                        </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                        <Text style={styles.modalText}>Register</Text>
+                        <View>
+                            <Text style={styles.modalText}>Register</Text>
+                        </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                        <Text style={styles.modalText}>Login</Text>
+                        <View>
+                            <Text style={styles.modalText}>Login</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </Modal>
@@ -96,7 +108,7 @@ export default function MyMenu() {
                     <LoggedInModal />
                     :
                     <LoggedOutModal />
-                };
+                }
             </View>
         </>
     );

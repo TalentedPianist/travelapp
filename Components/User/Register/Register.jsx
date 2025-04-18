@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
 
 export default function Register() {
+    const navigation = useNavigation(); // This was in the wrong place, causing a silent crash every time the button is clicked.
+
     const getAllKeys = async () => {
         let keys = [];
         try {
@@ -35,11 +37,11 @@ export default function Register() {
     const [errors, setErrors] = useState({});
 
     const handleRegister = async () => {
-        const navigation = useNavigation(); // Create navigation variable - used to redirect the user.
+    
         console.log('Register button clicked');
         const validationErrors = validateForm(formData);
         if (Object.keys(errors).length === 0) {
-
+            console.log('Submit button pressed');
             const password = await Crypto.digestStringAsync(
                 Crypto.CryptoDigestAlgorithm.SHA256, formData.password); // Encrypt password using expo-crypto
 
@@ -120,8 +122,8 @@ export default function Register() {
                 />
                 <View>{errors.password && <Text>{errors.password}</Text>}</View>
 
-                <TouchableOpacity onPress={handleRegister} style={styles.buttonStyle}>
-                    <Text style={styles.textStyles}>Register</Text>
+                <TouchableOpacity style={styles.buttonStyle} onPress={handleRegister}>
+                    <View><Text style={styles.textStyles}>Register</Text></View>
                 </TouchableOpacity>
             </View>
         </>

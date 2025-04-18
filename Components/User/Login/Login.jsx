@@ -7,6 +7,7 @@ import * as Crypto from 'expo-crypto';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import useAuthStore from '../../../zustand/useAuthStore';
+import { GetUser } from '../../../Helpers/user';
 
 const getUser = async () => { 
     const user = await AsyncStorage.getItem('user');
@@ -46,7 +47,10 @@ export default function Login() {
     };
     
     useEffect(() => { 
-        console.log('Current zustand state:', useAuthStore.getState());
+        const user = async () => { 
+            return await GetUser();
+        }
+        user();
     }, []);
        
 
