@@ -1,0 +1,122 @@
+import { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Button, Alert, ScrollView, Platform } from 'react-native';
+import { CameraView, CameraType } from 'expo-camera';
+import { useCameraPermissions } from 'expo-camera';
+
+
+export default function CameraComponent() {
+    const [facing, setFacing] = useState('back');
+    const [permission, requestPermission] = useCameraPermissions();
+    const cameraRef = useRef();
+
+    if (!permission) {
+        // Camera permissions are still loading
+        return <View />;
+    }
+
+    if (!permission.granted) {
+        // Camera permissions are not granted yet.
+        return (
+            <View>
+                <Text>We need your permission to show the camera.</Text>
+                <Button onPress={requestPermission} title="Grant permission" />
+            </View>
+        );
+    }
+
+    function toggleCameraFacing() {
+        setFacing(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+    }
+
+    // https://github.com/expo/expo/issues/26971
+    // Above code works after trying things and takePictureAsync() not working.
+    const handleTakePicture = async () => {
+        if (cameraRef.current) {
+            cameraRef.current.takePictureAsync({
+                skipProcessing: true,
+            })
+                .then((photoData) => {
+                    console.log(photoData.uri);
+                });
+        }
+
+    }
+
+    return (
+
+        <View style={styles.container}>
+
+            <Text style={styles.headingText}>Profile Picture</Text>
+            <Text style={styles.paragraphText}>Here you can add a profile picture using your camera.</Text>
+
+            <CameraView type={facing} style={styles.camera} ref={cameraRef}>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={toggleCameraFacing} style={styles.button}>
+                        <Text
+                            style={styles.cameraButtonText}
+                        >Flip Camera</Text>
+                    </TouchableOpacity>
+                </View>
+            </CameraView>
+            <TouchableOpacity onPress={() => handleTakePicture()}>
+                <Text>Take Picture</Text>
+            </TouchableOpacity>
+        </View>
+
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'space-evenly',
+        minHeight: '100%',
+        position: 'relative',
+    },
+    message: {
+        textAlign: 'center',
+
+    },
+    camera: {
+        flex: 0,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        alignItems: 'center',
+        minHeight: 50,
+        width: 350,
+        position: 'relative',
+    },
+    buttonContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: 'rgba(0,0,0,0.6);',
+        color: 'white',
+        margin: 100,
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        alignSelf: 'flex-end',
+        position: 'relative',
+        zIndex: 2,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
+    button: {
+        flex: 1,
+        justifyContent: 'flex-end',
+
+    },
+    paragraphText: {
+        fontSize: 24,
+        color: 'black',
+    },
+    headingText: {
+        fontSize: 36,
+        fontWeight: 'bold',
+    },
+    cameraButtonText: {
+        color: 'white',
+        fontSize: 22,
+    }
+});

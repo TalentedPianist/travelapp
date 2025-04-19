@@ -6,7 +6,7 @@ import useAuthStore from '../../../zustand/useAuthStore';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import UpdateProfile from './UpdateProfile';
-import Camera from './Camera';
+import Camera from './CameraComponent';
 
 export default function Profile() { 
     const [name, setName] = useState('');
@@ -66,7 +66,7 @@ export default function Profile() {
                     <Tab.Screen 
                         name="UpdateProfile"
                         options={{ 
-                            title: "Update Profile",
+                            title: "Profile Picture",
                             tabBarIcon: () => 
                                 <FontAwesome5 size={30} name="camera" color="purple" />
                         }}

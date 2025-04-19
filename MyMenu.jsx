@@ -23,6 +23,11 @@ const LoggedInModal = () => {
         navigation.navigate('Login');
     }
 
+    function handleNavigate(name) { 
+        navigation.navigate(name);
+        toggleModal();
+    }
+
     return (
         <>
             <View>
@@ -31,7 +36,7 @@ const LoggedInModal = () => {
                         <TouchableOpacity onPress={toggleModal}>
                             <MaterialCommunityIcons name="close" color="white" size={70} style={{ alignSelf: 'center' }} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                        <TouchableOpacity onPress={() => handleNavigate('Profile')}>
                             <View>
                                 <Text style={styles.modalText}>Profile</Text>
                             </View>
@@ -60,6 +65,11 @@ const LoggedOutModal = () => {
         setModalVisible(!isModalVisible);
     }
 
+    function handleNavigate(name) { 
+        navigation.navigate(name);
+        toggleModal();
+    }
+
     return (
         <>
             <Modal isVisible={isModalVisible}>
@@ -67,22 +77,22 @@ const LoggedOutModal = () => {
                     <TouchableOpacity onPress={toggleModal}>
                         <MaterialCommunityIcons name="close" size={70} color="white" style={{ alignSelf: 'center' }} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                    <TouchableOpacity onPress={() => handleNavigate('Home')}>
                         <View>
                             <Text style={styles.modalText}>Home</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('About')}>
+                    <TouchableOpacity onPress={() => handleNavigate('About')}>
                         <View>
                             <Text style={styles.modalText}>About</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                    <TouchableOpacity onPress={() => handleNavigate('Register')}>
                         <View>
                             <Text style={styles.modalText}>Register</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <TouchableOpacity onPress={() => handleNavigate('Login')}>
                         <View>
                             <Text style={styles.modalText}>Login</Text>
                         </View>

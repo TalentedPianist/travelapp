@@ -1,41 +1,41 @@
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
-
-import Camera from './Camera';
+import { View, Text, StyleSheet, TouchableOpacity, Button, ScrollView } from 'react-native';
+import CameraComponent from './CameraComponent';
 import LocationComponent from './LocationComponent';
 
 
 export default function UpdateProfile() {
     return (
         <>
-        <View style={styles.container}>
-            <Text style={styles.headingText}>Update Profile</Text>
-            <Text style={styles.paragraphText}>Here you can add a profile picture using your camera.</Text>
-            
-            <Text style={styles.paragraphText}>You can also add your location to your profile.</Text>
-            <LocationComponent />
-        </View>
-      
+            <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+                <CameraComponent />
+            </ScrollView>
         </>
-    ); 
+    );
 }
 
-const styles = StyleSheet.create({ 
-    container: { 
-        backgroundColor: 'yellow',
+const styles = StyleSheet.create({
+    container: {
         minHeight: '100%',
         height: '100%',
-        paddingLeft: 20,
-        paddingTop: 20,
         display: 'flex',
         flexDirection: 'column',
-        flex: 1,
-        flexGrow: 1,
+       
     },
-    headingText: { 
+    headingText: {
         fontSize: 28,
         color: 'black', // Ensure text is visible
     },
-    paragraphText: { 
+    paragraphText: {
         fontSize: 22,
+    },
+    scrollView: {
+        backgroundColor: 'yellow',
+   
+       
+    },
+    contentContainer: { 
+        justifyContent: 'center',
+        alignItems: 'center',
+      
     }
 });
