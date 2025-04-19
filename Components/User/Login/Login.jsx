@@ -71,6 +71,7 @@ export default function Login() {
                             left={<TextInput.Icon icon="account" />}
                             style={styles.inputStyle}
                             onChangeText={(text) => setFormData({ ...formData, email: text })}
+                            autoComplete="email"
                         />
 
 

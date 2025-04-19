@@ -14,10 +14,13 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "CFBundleURLTypes": [
-          { 
-            "CFBundleURLSchemes": ["com.googleusercontent.apps.100784437734-ed4u0lg903tpoh230793vsjb78pk4nr9"]
-        }
-      ]
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.100784437734-ed4u0lg903tpoh230793vsjb78pk4nr9"
+            ]
+          }
+        ],
+        "NSLocationWhenInUseDescription": "This app needs access to your location to show your current position." 
       }
     },
     "android": {
@@ -25,7 +28,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.douglas2.travelapp"
+      "package": "com.douglas2.travelapp",
+      "permissions": ["ACCESS_FINE_LOCATION"]
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -36,7 +40,6 @@
         "projectId": "105e583f-b44d-4c4b-9405-2a0c949ed441"
       }
     },
-   
     "owner": "douglas2",
     "plugins": [
       [
@@ -44,10 +47,9 @@
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": false,
+          "recordAudioAndroid": false
         }
       ]
     ]
-     
   }
 }

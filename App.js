@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -13,6 +13,8 @@ import Register from './Components/User/Register/Register';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+
+
 
 
 function HomeScreen() {
@@ -133,7 +135,7 @@ export default function App() {
 
     return (
         <>
-   
+        
             <NavigationContainer
                 ref={navigationRef}
                 onReady={() => {

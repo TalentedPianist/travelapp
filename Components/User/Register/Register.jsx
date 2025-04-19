@@ -1,10 +1,16 @@
 import GithubAuth from '../Login/GithubAuth';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React, { useState, useRef } from 'react';
 import { TextInput, HelperText, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
+
+const DismissKeyboard = ({ children }) => (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        {children}
+    </TouchableWithoutFeedback>
+);
 
 export default function Register() {
     const navigation = useNavigation(); // This was in the wrong place, causing a silent crash every time the button is clicked.
@@ -37,7 +43,7 @@ export default function Register() {
     const [errors, setErrors] = useState({});
 
     const handleRegister = async () => {
-    
+
         console.log('Register button clicked');
         const validationErrors = validateForm(formData);
         if (Object.keys(errors).length === 0) {
@@ -60,7 +66,7 @@ export default function Register() {
 
         } else {
             setErrors(validationErrors);
-         }
+        }
 
     };
 
@@ -90,42 +96,45 @@ export default function Register() {
     // https://medium.com/@rutikpanchal121/building-a-robust-form-in-react-native-with-react-hook-form-and-zod-for-validation-7583678970c3
     return (
         <>
-            <View style={styles.containerStyles}>
+            <DismissKeyboard>
+                <View style={styles.containerStyles}>
 
-                <Text style={styles.headerText}>Register</Text>
+                    <Text style={styles.headerText}>Register</Text>
 
-                <TextInput
-                    label="Name"
-                    left={<TextInput.Icon icon="account" />}
-                    style={styles.inputStyle}
-                    name="name"
-                    onChangeText={(text) => setFormData({ ...formData, name: text })}
-                />
-                <View>{errors.name && <Text>{errors.name}</Text>}</View>
+                    <TextInput
+                        label="Name"
+                        left={<TextInput.Icon icon="account" />}
+                        style={styles.inputStyle}
+                        name="name"
+                        onChangeText={(text) => setFormData({ ...formData, name: text })}
+                    />
+                    <View>{errors.name && <Text>{errors.name}</Text>}</View>
 
-                <TextInput
-                    label="Email"
-                    left={<TextInput.Icon icon="email" />}
-                    style={styles.inputStyle}
-                    name="email"
-                    onChangeText={(text) => setFormData({ ...formData, email: text })}
-                />
-                <View>{errors.email && <Text>{errors.email}</Text>}</View>
+                    <TextInput
+                        label="Email"
+                        left={<TextInput.Icon icon="email" />}
+                        style={styles.inputStyle}
+                        name="email"
+                        onChangeText={(text) => setFormData({ ...formData, email: text })}
+                        autoComplete="email"
+                    />
+                    <View>{errors.email && <Text>{errors.email}</Text>}</View>
 
-                <TextInput
-                    label="Password"
-                    left={<TextInput.Icon icon="eye" />}
-                    style={styles.inputStyle}
-                    secureTextEntry={true}
-                    name="password"
-                    onChangeText={(text) => setFormData({ ...formData, password: text })}
-                />
-                <View>{errors.password && <Text>{errors.password}</Text>}</View>
+                    <TextInput
+                        label="Password"
+                        left={<TextInput.Icon icon="eye" />}
+                        style={styles.inputStyle}
+                        secureTextEntry={true}
+                        name="password"
+                        onChangeText={(text) => setFormData({ ...formData, password: text })}
+                    />
+                    <View>{errors.password && <Text>{errors.password}</Text>}</View>
 
-                <TouchableOpacity style={styles.buttonStyle} onPress={handleRegister}>
-                    <View><Text style={styles.textStyles}>Register</Text></View>
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity style={styles.buttonStyle} onPress={handleRegister}>
+                        <View><Text style={styles.textStyles}>Register</Text></View>
+                    </TouchableOpacity>
+                </View>
+            </DismissKeyboard>
         </>
     );
 }
