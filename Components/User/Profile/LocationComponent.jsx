@@ -1,8 +1,9 @@
 import * as Location from 'expo-location';
 import { useState, useEffect, useRef } from 'react';
-import { View, StatusBar, FlatList, Text, Button, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
+import { View, StatusBar, FlatList, Text, Button, ActivityIndicator, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import MapView, { Marker } from 'react-native-maps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Geolocation tutorial - https://snack.expo.dev/@psalva/dwt---todo-storage-and-geolocation
 
@@ -65,7 +66,9 @@ export default function LocationComponent() {
                         title="You are here"
                     />
                 </MapView>
-                <Button title="Get location" onPress={fetchLocation} />
+                <TouchableOpacity style={styles.button} onPress={fetchLocation}>
+                    <Text style={styles.buttonText}>Get Location</Text>
+                </TouchableOpacity>
             </ScrollView>
         );
     } else { 
@@ -82,6 +85,9 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         minHeight: '100%',
+        backgroundColor: '#FAAB88',
+        paddingLeft: 20,
+        paddingTop: 20,
     },
     map: {
         flex: 1,
@@ -89,5 +95,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 400,
         width: '90%',
+    }, 
+    button: { 
+        backgroundColor: 'lightblue',
+        alignSelf: 'flex-start',
+        marginTop: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    buttonText: { 
+        fontSize: 24,
     }
 });

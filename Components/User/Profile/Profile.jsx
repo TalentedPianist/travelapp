@@ -6,13 +6,14 @@ import useAuthStore from '../../../zustand/useAuthStore';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import UpdateProfile from './UpdateProfile';
-import Camera from './CameraComponent';
+import LocationComponent from './LocationComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Profile() { 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [picture, setPicture] = useState('');
-    const [index, setIndex] = useState(0);
 
     const user = useAuthStore(state => state.user);
 
@@ -42,6 +43,11 @@ export default function Profile() {
         return <UpdateProfile />;
     }
 
+    function AddLocationScreen() { 
+        return <LocationComponent />;
+
+    }
+
     function DeleteProfileScreen() { 
         return (
             <View>
@@ -64,13 +70,22 @@ export default function Profile() {
                         component={ProfileScreenNew} 
                     />
                     <Tab.Screen 
-                        name="UpdateProfile"
+                        name="ProfilePicture"
                         options={{ 
                             title: "Profile Picture",
                             tabBarIcon: () => 
                                 <FontAwesome5 size={30} name="camera" color="purple" />
                         }}
                          component={UpdateProfileScreen} 
+                    />
+                    <Tab.Screen 
+                        name="AddLocationScreen"
+                        options={{
+                            title: "Add Location",
+                            tabBarIcon: () => 
+                                <FontAwesome5 size={30} name="map" color="purple" />
+                        }}
+                        component={AddLocationScreen}
                     />
                     <Tab.Screen 
                         name="DeleteProfileScreen"

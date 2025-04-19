@@ -1,13 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Button, Alert, ScrollView, Platform } from 'react-native';
-import { CameraView, CameraType } from 'expo-camera';
+import { CameraView } from 'expo-camera';
+import { CameraType } from 'expo-camera';
 import { useCameraPermissions } from 'expo-camera';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function CameraComponent() {
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const cameraRef = useRef();
+    const navigation = useNavigation();
 
     if (!permission) {
         // Camera permissions are still loading
@@ -25,7 +29,7 @@ export default function CameraComponent() {
     }
 
     function toggleCameraFacing() {
-        setFacing(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+        setFacing(current => (current === 'back' ? 'front' : 'back'));
     }
 
     // https://github.com/expo/expo/issues/26971
@@ -36,7 +40,23 @@ export default function CameraComponent() {
                 skipProcessing: true,
             })
                 .then((photoData) => {
-                    console.log(photoData.uri);
+                    Alert.alert('Profile', 'Add photo to profile?', [
+                        {
+                            text: 'Yes',
+                            onPress: async () => {
+                               const pic = JSON.stringify(photoData);
+                               await AsyncStorage.setItem('picture', pic);
+                               //const lastInsertedPic = await AsyncStorage.getItem('picture');
+                               //const parsed = JSON.parse(lastInsertedPic);
+                               navigation.navigate('Profile');
+                            },
+                        },
+                        { 
+                            text: 'No',
+                            onPress: () => console.log('Cancel pressed')
+                        },
+                    ]
+                    );
                 });
         }
 
@@ -49,7 +69,7 @@ export default function CameraComponent() {
             <Text style={styles.headingText}>Profile Picture</Text>
             <Text style={styles.paragraphText}>Here you can add a profile picture using your camera.</Text>
 
-            <CameraView type={facing} style={styles.camera} ref={cameraRef}>
+            <CameraView facing={facing} style={styles.camera} ref={cameraRef}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={toggleCameraFacing} style={styles.button}>
                         <Text
