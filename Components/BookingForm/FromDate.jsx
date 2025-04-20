@@ -2,37 +2,39 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
-export default function FromDate() {
+function FromDate({ childToParent }) {
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState();
 
-    const onChange = (event, value) => { 
+    const onChange = useCallback((event, value) => { 
         setSelectedDate(value);
-    }
+        childToParent({ component: 'FromDate', fromDate: value });
+    }, []);
 
-    const showMode = (currentMode) => { 
+    const showMode = useCallback((currentMode) => { 
         DateTimePickerAndroid.open({ 
             value: date,
             onChange,
             mode: currentMode,
             is24Hour: true,
         });
-    };
+    }, [date, onChange]);
 
-    const showDatePicker = () => { 
+    const showDatePicker = useCallback(() => { 
         showMode('date');
-    }
+    }, [date]);
 
-    const showTimePicker = () => { 
+    const showTimePicker = useCallback(() => { 
         showMode('time');
-    }
+    }, [date]);
 
     return ( 
         <>
         <View style={styles.containerStyle}>
+            
             <TextInput 
                 label="From date"
                 left={<TextInput.Icon icon="calendar" />}
@@ -40,8 +42,8 @@ export default function FromDate() {
                 onPress={showDatePicker}
                 onFocus={showDatePicker}
                 value={selectedDate ? selectedDate.toLocaleDateString() : 'No date selected'}
-                
             />
+            
         </View>
         </>
     )
@@ -61,3 +63,6 @@ const styles = StyleSheet.create({
         display: 'flex',
     }
 });
+
+
+export default React.memo(FromDate);

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Provider as PaperProvider, TextInput } from 'react-native-paper';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
-function City({ sendDataToParent }) {
+function City({ childToParent }) {
     const [loading, setLoading] = useState(false);
     const [suggestionsList, setSuggestionsList] = useState(null);
     const [selectedItem, setSelectedItem] = useState();
@@ -18,8 +18,6 @@ function City({ sendDataToParent }) {
         
         try {
             setSelectedItem(item);
-
-            sendDataToParent(item);
 
         } catch (error) {
             console.log(error);

@@ -1,79 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Button, Icon } from 'react-native';
-import { TextInput, PaperProvider } from 'react-native-paper';
-import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import moment from 'moment';
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { useState } from 'react';
 
-function ToDate({ sendDataToParent }) {
-
-    const [toDate, setToDate] = useState(new Date()); // Initialize toDate with a default value
+export default function ToDate({ childToParent }) {
+    const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
-    const lastSentDateRef = useRef(null); // For avoiding duplicate sends
+    const [selectedDate, setSelectedDate] = useState();
 
-    const showMode = (currentMode) => {
-        DateTimePickerAndroid.open({
-            value: new Date(),
-            onChange,
+    const onChange = (event, value) => { 
+        setSelectedDate(value);
+        childToParent({ component: 'ToDate', toDate: value });
+    }
+
+    const showMode = (currentMode) => { 
+        DateTimePickerAndroid.open({ 
+            value: date,
+            onChange, 
             mode: currentMode,
             is24Hour: true,
         });
     };
 
-    const showDatePicker = () => {
+    const showDatePicker = () => { 
         showMode('date');
     }
 
-    const showTimePicker = () => {
+    const showTimePicker = () => { 
         showMode('time');
     }
-
-    const onChange = (event, selectedDate) => {
-        // const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
-        // if (formattedDate != lastSentDateRef.current) { 
-        //     setToDate(formattedDate);
-        //     sendDataToParent({ toDate: formattedDate, component: 'toDate' });
-        //     lastSentDateRef.current = formattedDate;
-        // }
-        sendDataToParent({ toDate: selectedDate, component: 'ToDate' });
-    };
-
 
     return (
         <>
             <View style={styles.containerStyle}>
-                {showPicker && (
-                    <RNDateTimePicker
-                        design="material"
-                        value={toDate}
-                        mode="date" // Specify the mode (date or time)
-                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        onChange={onChange}
-                    />
-                )}
-
-                <TextInput
-                    label="To date"
+                <TextInput 
+                    label="From date"
                     left={<TextInput.Icon icon="calendar" />}
-                    onFocus={showDatePicker} // Show the date picker when input is focused
-                    onPress={showDatePicker} // Show the date picker when field is pressed
-                    value={moment(toDate).format('YYYY-MM-DD')}
                     style={styles.textInput}
+                    onPress={showDatePicker}
+                    onFocus={showDatePicker}
+                    value={selectedDate ? selectedDate.toLocaleDateString() : 'No date selected'}
                 />
-
             </View>
         </>
     );
 }
 
-const styles = StyleSheet.create({
-    textInput: {
+const styles = StyleSheet.create({ 
+    textInput: { 
         backgroundColor: 'orange',
-
+        width: '100%',
+        display: 'flex',
     },
-    containerStyle: {
+    containerStyle: { 
+        display: 'flex',
         flex: 1,
         width: '100%',
     }
 });
-
-export default React.memo(ToDate);

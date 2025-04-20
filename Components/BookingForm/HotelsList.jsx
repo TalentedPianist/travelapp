@@ -10,42 +10,31 @@ import ToDate from './ToDate';
 import NoOfGuests from './NoOfGuests';
 import NoOfRooms from './NoOfRooms';
 
+
+
 export default function HotelsList({ children }) {
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
-    const [city, setCity] = useState("");
-    const [fromDate, setFromDate] = useState(); // Set date in case user submits without selecting 
-    const [toDate, setToDate] = useState(); // Set date in case user submits without selecting
-    const [noOfGuests, setNoOfGuests] = useState();
-    const [noOfRooms, setNoOfRooms] = useState(0);
-    const [entityId, setEntityId] = useState();
+    const cityRef = useRef("");
+    const fromDateRef = useRef(); // Set date in case user submits without selecting 
+    const toDateRef = useRef(); // Set date in case user submits without selecting
+    const noOfGuestsRef = useRef();
+    const noOfRoomsRef = useRef(0);
+    const entityIdRef = useRef();
     const [hotelsList, setHotelsList] = useState([]);
-    const [submitting, setSubmitting] = useState(false);
+
+
     const submitRef = useRef();
 
+    const childToParent = useCallback((data) => { 
+        // Memoized to prevent unnecessary re-renders
+        
+    }, []);
 
-    const handleDataFromChild = useCallback((data) =>  {
    
-        if (!data || !data.component) return;
-
-        if (data.component === 'City') { 
-            setCity(data.title); // THis was data.name, maybe the reason for undefined error?
-            setEntityId(data.entityId);
-        }
-
-        if (data.component === 'FromDate') { 
-       
-            setFromDate(data.fromDate);
-        } 
-
-        if (data.component === 'ToDate') { 
-            setToDate(data.toDate);
-        }
-    }, []); 
-
 
     const handleSubmit = async () => {
-        console.log({ city, fromDate, toDate });
+        console.log(fromDateRef.current.fromDate);
         
     
 
@@ -148,17 +137,17 @@ export default function HotelsList({ children }) {
                          
 
                                 <View style={styles.firstRow}>
-                                    <City sendDataToParent={handleDataFromChild}  />
+                                    <City childToParent={(data) => { cityRef.current = data; }} />
 
                                 </View>
                                 <View style={styles.secondRow}>
-                                    <FromDate sendDataToParent={handleDataFromChild} />
-                                    <ToDate sendDataToParent={handleDataFromChild} />
+                                    <FromDate childToParent={(data) => { fromDateRef.current = data; }} />
+                                    <ToDate childToParent={(data) => { toDateRef.current = data; }} />
 
                                 </View>
                                 <View style={styles.thirdRow}>
-                                    <NoOfGuests sendDataToParent={handleDataFromChild} />
-                                    <NoOfRooms />
+                                    <NoOfGuests childToParent={(data) => { noOfGuestsRef.current = data; }} />
+                                    <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} />
                                 </View>
                                 <TouchableOpacity onPress={handleSubmit} ref={submitRef} style={styles.searchButton}>
                                     <Text style={styles.searchText}>Search</Text>
