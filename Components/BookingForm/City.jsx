@@ -18,7 +18,7 @@ function City({ childToParent }) {
         
         try {
             setSelectedItem(item);
-
+            childToParent(item);
         } catch (error) {
             console.log(error);
         }

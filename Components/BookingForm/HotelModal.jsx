@@ -1,42 +1,27 @@
-import { useState } from 'react';
-import { Button, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
+import { useState } from 'react';
 
 export default function HotelModal(props) {
     const [isModalVisible, setModalVisible] = useState(false);
-    
-    const toggleModal = () => { 
+
+    const toggleModal = () => {
         setModalVisible(!isModalVisible);
     }
 
     return (
         <>
-            <TouchableOpacity style={styles.viewButton} onPress={toggleModal}>
-                <Text>View</Text>
-            </TouchableOpacity>
-
-            <Modal isVisible={isModalVisible}>
-                <View  style={styles.modalStyle}>
-                    <Text style={styles.textStyle}>Hello</Text>
-                </View>
-            </Modal>
+            <Button onPress={toggleModal} title="View">View</Button>
+            <View>
+                <Modal isVisible={false}>
+                    <View style={{ flex: 1 }}>
+                    </View>
+                </Modal>
+            </View>
         </>
     );
 }
 
-const styles = StyleSheet.create({ 
-    viewButton: { 
-        backgroundColor: 'beige',
-        paddingLeft: 10, 
-        paddingRight: 10, 
-        paddingTop: 10, 
-        paddingBottom: 10,
-    },
-    modalStyle: { 
-        display: 'flex',
-    }, 
-    textStyle: { 
-        color: 'white',
-        fontSize: 28,
-    }
+const styles = StyleSheet.create({
 });

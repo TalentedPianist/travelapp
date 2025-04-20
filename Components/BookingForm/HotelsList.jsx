@@ -9,7 +9,9 @@ import FromDate from './FromDate';
 import ToDate from './ToDate';
 import NoOfGuests from './NoOfGuests';
 import NoOfRooms from './NoOfRooms';
-
+import axios from 'axios';
+import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function HotelsList({ children }) {
@@ -18,7 +20,7 @@ export default function HotelsList({ children }) {
     const cityRef = useRef("");
     const fromDateRef = useRef(); // Set date in case user submits without selecting 
     const toDateRef = useRef(); // Set date in case user submits without selecting
-    const noOfGuestsRef = useRef();
+    const noOfGuestsRef = useRef(0);
     const noOfRoomsRef = useRef(0);
     const entityIdRef = useRef();
     const [hotelsList, setHotelsList] = useState([]);
@@ -26,38 +28,40 @@ export default function HotelsList({ children }) {
 
     const submitRef = useRef();
 
-    const childToParent = useCallback((data) => { 
+    const childToParent = useCallback((data) => {
         // Memoized to prevent unnecessary re-renders
-        
+
     }, []);
 
-   
+
 
     const handleSubmit = async () => {
-        console.log(fromDateRef.current.fromDate);
-        
-    
 
-        const apiUrl = `https://skyscanner89.p.rapidapi.com/hotels/list?entity_id=${entityId}&checkin=${moment(fromDate).format('YYYY-MM-DD')}&checkout=${moment(toDate).format('YYYY-MM-DD')}&per_page=5`;
+        const fromDate = fromDateRef.current?.fromDate;
+        const toDate = fromDateRef.current?.toDate;
+        const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+        const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+        const id = cityRef.current.id;
+
+        const url = 'https://skyscanner89.p.rapidapi.com/hotels/list?entity_id=27537542&checkin=2025-04-21&checkout=2025-04-27';
         const options = {
             method: 'GET',
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com',
+                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com'
             }
         };
-        // There seems to be a problem with axios randomly not getting data even though it worked before.  fetch API is a lot nicer and just works.
+
+        // What I'll have to do is use dummy data to get everything else done and see how it is by Tuesday.
         try {
-            //setLoading(true);
-            const response = await fetch(apiUrl, options);
-
-
-            const data = await response.json(); // This line is the key to getting it working.  Explain in report that it needs await.  Fetch seems to be faster too.
-            //console.log(data.results.hotelCards);
-            setHotelsList(data.results.hotelCards);
+            const response = await fetch(url, options);
+            const result = await response.json();
+            setHotelsList(result.results.hotelCards);
+            console.log(result);
         } catch (error) {
             console.error(error);
         }
+
     }
 
 
@@ -66,39 +70,18 @@ export default function HotelsList({ children }) {
             await AsyncStorage.setItem('hotel', JSON.stringify(item));
             const result = JSON.parse(await AsyncStorage.getItem('hotel')); // JSON.parse() is very important!!! Mention in report.
             console.log(result.name);
-            navigator.navigate('/Home');
+            navigation.navigate('Home');
         } catch (e) {
             console.log(e);
         }
     }
-
-
-    const getHotels = async (city) => {
-        const url = `https://skyscanner89.p.rapidapi.com/hotels/auto-complete?query=${q}`;
-        const options = { 
-            method: 'GET',
-            headers: { 
-                'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com',
-            }
-        };
-
-        try { 
-            const response = await fetch(url, options);
-            const result = await response.json();
-            console.log(result);
-        } catch (error)  {
-            console.log(error);
-        }
-    }
-
 
     return (
         <>
 
 
             <FlatList
-                
+                data={hotelsList}
                 ListEmptyComponent={() => {
                     return (
                         <>
@@ -114,12 +97,7 @@ export default function HotelsList({ children }) {
 
                             <Text style={styles.hotelsListText}>{item.name}</Text>
                             <View style={styles.buttonsView}>
-                                <TouchableOpacity>
-                                    <Text style={styles.viewButton}>View</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleSave(item)}>
-                                    <Text style={styles.saveButton}>Save</Text>
-                                </TouchableOpacity>
+                                <HotelModal />
                             </View>
                         </View>
                     )
@@ -134,7 +112,7 @@ export default function HotelsList({ children }) {
                                     <Text variant="headlineMedium">Find a Hotel</Text>
                                 </View>
 
-                         
+
 
                                 <View style={styles.firstRow}>
                                     <City childToParent={(data) => { cityRef.current = data; }} />
@@ -142,14 +120,14 @@ export default function HotelsList({ children }) {
                                 </View>
                                 <View style={styles.secondRow}>
                                     <FromDate childToParent={(data) => { fromDateRef.current = data; }} />
-                                    <ToDate childToParent={(data) => { toDateRef.current = data; }} />
+                                    <ToDate childToParent={(data) => { toDateRef.current = { toDate: data }; }} />
 
                                 </View>
                                 <View style={styles.thirdRow}>
                                     <NoOfGuests childToParent={(data) => { noOfGuestsRef.current = data; }} />
                                     <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} />
                                 </View>
-                                <TouchableOpacity onPress={handleSubmit} ref={submitRef} style={styles.searchButton}>
+                                <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
                                     <Text style={styles.searchText}>Search</Text>
                                 </TouchableOpacity>
                             </View>
@@ -157,6 +135,7 @@ export default function HotelsList({ children }) {
                     );
                 }}
             />
+
         </>
     );
 }
