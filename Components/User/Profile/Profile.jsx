@@ -7,7 +7,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import UpdateProfile from './UpdateProfile';
 import LocationComponent from './LocationComponent';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Profile() { 

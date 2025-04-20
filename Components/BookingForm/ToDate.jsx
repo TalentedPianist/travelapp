@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Button, Icon } from 'react-native';
 import { TextInput, PaperProvider } from 'react-native-paper';
 import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
-export default function ToDate({ sendDataToParent }) {
+function ToDate({ sendDataToParent }) {
 
-    const [toDate, setToDate] = useState(); // Initializes with the current date
+    const [toDate, setToDate] = useState(new Date()); // Initialize toDate with a default value
     const [showPicker, setShowPicker] = useState(false);
+    const lastSentDateRef = useRef(null); // For avoiding duplicate sends
 
     const showMode = (currentMode) => {
         DateTimePickerAndroid.open({
@@ -27,11 +28,15 @@ export default function ToDate({ sendDataToParent }) {
     }
 
     const onChange = (event, selectedDate) => {
-        const currentDate = moment(selectedDate).format('YYYY-MM-DD');
-        setToDate(currentDate);
-        sendDataToParent({ toDate: currentDate, component: 'ToDate' });
-
+        // const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+        // if (formattedDate != lastSentDateRef.current) { 
+        //     setToDate(formattedDate);
+        //     sendDataToParent({ toDate: formattedDate, component: 'toDate' });
+        //     lastSentDateRef.current = formattedDate;
+        // }
+        sendDataToParent({ toDate: selectedDate, component: 'ToDate' });
     };
+
 
     return (
         <>
@@ -41,7 +46,7 @@ export default function ToDate({ sendDataToParent }) {
                         design="material"
                         value={toDate}
                         mode="date" // Specify the mode (date or time)
-                        display={Platform.os === 'ios' ? 'spinner' : 'default'}
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                         onChange={onChange}
                     />
                 )}
@@ -70,3 +75,5 @@ const styles = StyleSheet.create({
         width: '100%',
     }
 });
+
+export default React.memo(ToDate);

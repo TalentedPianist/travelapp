@@ -1,70 +1,50 @@
-import City from './City';
-import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Button, Icon } from 'react-native';
-import { TextInput, PaperProvider } from 'react-native-paper';
-import * as Calendar from 'expo-calendar';
-import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import { Dropdown } from 'react-native-paper-dropdown';
-import moment from 'moment';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
 
-export default function FromDate({ sendDataToParent }) {
+export default function FromDate() {
+    const [date, setDate] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState();
 
-    const [city, setCity] = useState(null);
-    const [fromDate, setFromDate] = useState(new Date()); // Initializes with the current date
-    const [showPicker, setShowPicker] = useState(false); // Control visibility of the picker
-    const [date, setShowDate] = useState(new Date(1598051730000));
+    const onChange = (event, value) => { 
+        setSelectedDate(value);
+    }
 
-    const showMode = (currentMode) => {
-        DateTimePickerAndroid.open({
-            value: new Date(),
+    const showMode = (currentMode) => { 
+        DateTimePickerAndroid.open({ 
+            value: date,
             onChange,
             mode: currentMode,
             is24Hour: true,
         });
     };
 
-    const showDatePicker = () => {
+    const showDatePicker = () => { 
         showMode('date');
-
     }
 
-    const showTimePicker = () => {
+    const showTimePicker = () => { 
         showMode('time');
     }
 
-    const onChange = (event, selectedDate) => { 
-        const currentDate = moment(selectedDate).format('YYYY-MM-DD');
-        setShowPicker(false);
-        setFromDate(new Date(currentDate));
-        sendDataToParent({ fromDate: currentDate, component: 'FromDate' });
-    };
-
-    return (
+    return ( 
         <>
-
-            <View style={styles.containerStyle}>
-                {showPicker && (
-                    <RNDateTimePicker 
-                    design="material"
-                    value={fromDate}
-                    mode="date" // Specify the mode (date or time)
-                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    onChange={onChange} 
-                    />
-                )}
-
-                <TextInput
-                    label="From date"
-                    left={<TextInput.Icon icon="calendar" />}
-                    style={styles.textInput}
-                    onFocus={showDatePicker} // Show the picker when the input is focused
-                    onPress={showDatePicker} // Show the date picker when field is pressed
-                    value={moment(fromDate).format('YYYY-MM-DD')} // Display the selected date in the input
-                />
-              
-            </View>
+        <View style={styles.containerStyle}>
+            <TextInput 
+                label="From date"
+                left={<TextInput.Icon icon="calendar" />}
+                style={styles.textInput}
+                onPress={showDatePicker}
+                onFocus={showDatePicker}
+                value={selectedDate ? selectedDate.toLocaleDateString() : 'No date selected'}
+                
+            />
+        </View>
         </>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -81,4 +61,3 @@ const styles = StyleSheet.create({
         display: 'flex',
     }
 });
-
