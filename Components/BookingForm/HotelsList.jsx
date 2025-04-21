@@ -37,27 +37,33 @@ export default function HotelsList({ children }) {
 
     const handleSubmit = async () => {
 
-        const fromDate = fromDateRef.current?.fromDate;
-        const toDate = fromDateRef.current?.toDate;
+        const fromDate = fromDateRef.current.fromDate;
+        const toDate = toDateRef.current.toDate;
+        console.log(toDate);
         const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
         const formattedToDate = moment(toDate).format('YYYY-MM-DD');
         const id = cityRef.current.id;
 
-        const url = 'https://skyscanner89.p.rapidapi.com/hotels/list?entity_id=27537542&checkin=2025-04-21&checkout=2025-04-27';
         const options = {
             method: 'GET',
+            url: 'https://skyscanner89.p.rapidapi.com/hotels/list',
+            params: {
+                entity_id: id,
+                checkin: formattedFromDate,
+                checkout: formattedToDate,
+                adults: 1,
+            },
             headers: {
                 'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
                 'x-rapidapi-host': 'skyscanner89.p.rapidapi.com'
             }
         };
 
-        // What I'll have to do is use dummy data to get everything else done and see how it is by Tuesday.
         try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            setHotelsList(result.results.hotelCards);
-            console.log(result);
+            const response = await axios.request(options);
+            console.log(response);
+            setHotelsList(response.data.results.hotelCards);
+         
         } catch (error) {
             console.error(error);
         }
@@ -65,17 +71,7 @@ export default function HotelsList({ children }) {
     }
 
 
-    const handleSave = async (item) => {
-        try {
-            await AsyncStorage.setItem('hotel', JSON.stringify(item));
-            const result = JSON.parse(await AsyncStorage.getItem('hotel')); // JSON.parse() is very important!!! Mention in report.
-            console.log(result.name);
-            navigation.navigate('Home');
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
+    // Syntax for NoOfRooms ref was messed up, causing hours of pain. Working now.
     return (
         <>
 
@@ -92,12 +88,15 @@ export default function HotelsList({ children }) {
                     );
                 }}
                 renderItem={({ item, index }) => {
+
                     return (
                         <View style={styles.hotelsList}>
 
                             <Text style={styles.hotelsListText}>{item.name}</Text>
                             <View style={styles.buttonsView}>
-                                <HotelModal />
+
+                                <HotelModal name={item.name} distance={item.distance} image={item.images[0]} price={item.lowestPrice.price} id={item.id} />
+
                             </View>
                         </View>
                     )
@@ -120,12 +119,12 @@ export default function HotelsList({ children }) {
                                 </View>
                                 <View style={styles.secondRow}>
                                     <FromDate childToParent={(data) => { fromDateRef.current = data; }} />
-                                    <ToDate childToParent={(data) => { toDateRef.current = { toDate: data }; }} />
+                                    <ToDate childToParent={(data) => { toDateRef.current = data; }} />
 
                                 </View>
                                 <View style={styles.thirdRow}>
                                     <NoOfGuests childToParent={(data) => { noOfGuestsRef.current = data; }} />
-                                    <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} />
+                                    <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} /> 
                                 </View>
                                 <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
                                     <Text style={styles.searchText}>Search</Text>
