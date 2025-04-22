@@ -76,7 +76,9 @@
     "doctor": {
       "reactNativeDirectoryCheck": {
         "listUnknownPackages": false,
-        "exclude": ["@hookform/resolvers"]
+        "exclude": [
+          "@hookform/resolvers"
+        ]
       }
     }
   }
