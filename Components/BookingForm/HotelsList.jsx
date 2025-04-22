@@ -1,6 +1,6 @@
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Text } from 'react-native-paper';
+import { Text, Divider, ActivityIndicator } from 'react-native-paper';
 import HotelModal from './HotelModal';
 import { useNavigation } from '@react-navigation/native';
 import BookingFormComponent from './BookingFormComponent';
@@ -78,11 +78,18 @@ export default function HotelsList({ children }) {
 
             <FlatList
                 data={hotelsList}
+                ItemSeparatorComponent={() => { 
+                    return (
+                        <View>
+                            <Divider style={{ color: 'black' }} />
+                        </View>
+                    );
+                }}
                 ListEmptyComponent={() => {
                     return (
                         <>
                             <View style={styles.emptyContainer}>
-                                <Text variant="" style={{ backgroundColor: 'yellow' }}>Find your next great city break!</Text>
+                                <Text variant="" style={styles.emptyTextStyle}>Find your next great city break!</Text>
                             </View>
                         </>
                     );
@@ -127,7 +134,7 @@ export default function HotelsList({ children }) {
                                     <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} /> 
                                 </View>
                                 <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
-                                    <Text style={styles.searchText}>Search</Text>
+                                    <Text variant="headlineMedium" style={styles.searchText}>Search</Text>
                                 </TouchableOpacity>
                             </View>
                         </>
@@ -146,20 +153,16 @@ const styles = StyleSheet.create({
         flex: 0,
         flexGrow: 0,
         backgroundColor: 'lightgreen',
-        paddingLeft: 20,
-        paddingRight: 20,
-        justifyContent: 'space-beetween',
-        gap: 30,
-        paddingBottom: 30,
+        height: '100%',
+        minHeight: '100%',
     },
     hotelsList: {
         backgroundColor: 'lightgreen',
-        flex: 0,
+        flexDirection: 'column',
+        flexGrow: 1,
         paddingLeft: 20,
-        paddingTop: 20,
-        paddingBottom: 20,
         paddingRight: 20,
-
+        gap: 0,
     },
     hotelsListText: {
         fontSize: 20,
@@ -201,12 +204,10 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     headerText: {
-        fontSize: 38,
+        fontSize: 28,
     },
     emptyContainer: {
-        height: 'revert',
-        flex: 0,
-        display: 'flex',
+        
     },
     emptyText: {
         fontSize: 24,
@@ -264,6 +265,18 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 26,
     },
+    emptyTextStyle: { 
+        backgroundColor: 'lightgreen',
+        fontSize: 26,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 20,
+        paddingBottom: 20,
+        alignSelf: 'center',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 })

@@ -21,9 +21,9 @@ export default function CameraComponent() {
     if (!permission.granted) {
         // Camera permissions are not granted yet.
         return (
-            <View>
-                <Text>We need your permission to show the camera.</Text>
-                <Button onPress={requestPermission} title="Grant permission" />
+            <View style={styles.container}>
+                <Text style={styles.textStyle}>We need your permission to show the camera.</Text>
+                <Button onPress={requestPermission} title="Grant permission" style={styles.buttonStyle} />
             </View>
         );
     }
@@ -65,8 +65,6 @@ export default function CameraComponent() {
     return (
 
         <View style={styles.container}>
-
-            <Text style={styles.headingText}>Profile Picture</Text>
             <Text style={styles.paragraphText}>Here you can add a profile picture using your camera.</Text>
 
             <CameraView facing={facing} style={styles.camera} ref={cameraRef}>
@@ -78,8 +76,8 @@ export default function CameraComponent() {
                     </TouchableOpacity>
                 </View>
             </CameraView>
-            <TouchableOpacity onPress={() => handleTakePicture()}>
-                <Text>Take Picture</Text>
+            <TouchableOpacity onPress={() => handleTakePicture()} style={styles.buttonStyle}>
+                <Text style={styles.buttonText}>Take Picture</Text>
             </TouchableOpacity>
         </View>
 
@@ -88,10 +86,15 @@ export default function CameraComponent() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'space-evenly',
+        flexGrow: 1,
         minHeight: '100%',
+        height: '100%',
         position: 'relative',
+        backgroundColor: '#9fe2bf',
+        paddingTop: 20,
+        paddingLeft: 20,
+        marginRightBottom: 20,
+        gap: 30,
     },
     message: {
         textAlign: 'center',
@@ -137,6 +140,21 @@ const styles = StyleSheet.create({
     },
     cameraButtonText: {
         color: 'white',
+        fontSize: 22,
+    },
+    textStyle: { 
+        fontSize: 24,
+    },
+    buttonStyle: { 
+        alignSelf: 'flex-start',
+        backgroundColor: 'lightblue',
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingBottom: 20,
+        paddingRight: 20,
+        marginTop: 20,
+    },
+    buttonText: { 
         fontSize: 22,
     }
 });

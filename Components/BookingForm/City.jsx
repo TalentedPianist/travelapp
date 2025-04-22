@@ -8,11 +8,7 @@ function City({ childToParent }) {
     const [loading, setLoading] = useState(false);
     const [suggestionsList, setSuggestionsList] = useState(null);
     const [selectedItem, setSelectedItem] = useState();
-    const searchRef = useRef(null);
-    const [entityId, setEntityId] = useState('');
-    const [city, setCity] = useState('');
-    const [text, setText] = useState('');
-    const cityRef = useRef;
+    const [error, setError] = useState('');
 
     const handleSelectItem = useCallback((item) => {
         
@@ -95,7 +91,7 @@ function City({ childToParent }) {
                     }
                 }}
             />
-
+            {error && <Text>{error}</Text>}
         </>
     );
 }

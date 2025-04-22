@@ -23,9 +23,6 @@ export default function BookingFormComponent() {
     const hotelsRef = useRef();
     const [loading, setLoading] = useState(false); // Define loading state for activity indicator
     const [hotelsList, setHotelsList] = useState([]); // Be sure to define the array correctly!
-    const [isVisible, setIsVisible] = useState(true);
-    const [rapid, setRapid] = useState([]);
-    const [showForm, setShowForm] = useState(false);
     const [hotel, setHotel] = useState([]);
 
     const handleDataFromChild = (data) => {

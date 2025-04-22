@@ -13,9 +13,7 @@ import Register from './Components/User/Register/Register';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
-
-
+import { AuthProvider, useAuth } from './AuthContext';
 
 function HomeScreen() {
     return (
@@ -57,6 +55,8 @@ const Stack = createNativeStackNavigator();
 
 function RootStack() {
     const navigation = useNavigation();
+    const { isLoggedIn } = useAuth(); // context variables need to be used inside the root navigation stack else we get an undefined error
+
 
     return (
         <>
@@ -128,6 +128,7 @@ export default function App() {
     const navigationRef = useRef();
     const isReadyRef = useRef(false); // Sets navigation to ready otherwise we get an error
 
+
     useEffect(() => {
         //clearAll();
         getAllKeys();
@@ -135,7 +136,7 @@ export default function App() {
 
     return (
         <>
-        
+       
             <NavigationContainer
                 ref={navigationRef}
                 onReady={() => {
@@ -143,13 +144,13 @@ export default function App() {
                 }}
             >
        
-
+                <AuthProvider>
                     <AutocompleteDropdownContextProvider>
                         <PaperProvider>
                             <RootStack />
                         </PaperProvider>
                     </AutocompleteDropdownContextProvider>
-            
+                </AuthProvider>
             </NavigationContainer>
         
         </>

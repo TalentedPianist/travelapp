@@ -2,19 +2,19 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef, useContext, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import useAuthStore from '../../../zustand/useAuthStore';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Tabs } from 'expo-router';
 import UpdateProfile from './UpdateProfile';
 import LocationComponent from './LocationComponent';
-
+import CameraComponent from './CameraComponent';
+import DeleteProfile from './DeleteProfile';
+import ProfileView from './ProfileView';
 
 export default function Profile() { 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [picture, setPicture] = useState('');
 
-    const user = useAuthStore(state => state.user);
 
     const Tab = createBottomTabNavigator();
 
@@ -30,12 +30,7 @@ export default function Profile() {
 
 
     function ProfileScreenNew() { 
-        return (
-            <View style={styles.profileContainer}>
-                <Text style={styles.headerText}>My Profile</Text>
-                <Text style={styles.greetingText}>Hi {name}, welcome to your profile.</Text>
-            </View>
-        );
+        return <ProfileView />;
     }
 
     function UpdateProfileScreen() { 
@@ -48,25 +43,45 @@ export default function Profile() {
     }
 
     function DeleteProfileScreen() { 
-        return (
-            <View>
-                <Text>Delete Profile</Text>
-            </View>
-        );
+        return <DeleteProfile />;
     }
 
     return (
         <>
             <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: 'orange' }}>
                
-                <Tab.Navigator style={styles.tabStyles} sceneContainerStyle={{ backgroundColor: 'yellow'}}>
+                <Tab.Navigator 
+                    screenOptions={{
+                        headerStyle: { 
+                            backgroundColor: 'lime',
+                            
+                        },
+                        tabBarStyle: { 
+                            backgroundColor: 'yellow'
+                        },
+                        tabBarLabelStyle: {
+                            color: 'black',
+                            fontSize: 10,
+                            fontWeight: 'bold',
+                        }
+                    }}
+                    >
                     <Tab.Screen 
-                        name="Profile"
+                        name="ViewProfile"
                         options={{ 
                             title: 'Profile',
                             tabBarIcon: () => <FontAwesome5 size={30} name="user" color="purple" />,
-                        }} 
+                        }}
                         component={ProfileScreenNew} 
+                    />
+                    <Tab.Screen
+                        name="UpdateProfile"
+                        options={{
+                            title: "Update Profile",
+                            tabBarIcon: () => 
+                                <FontAwesome5 size={30} name="user-edit" color="purple" />
+                        }}
+                        component={UpdateProfileScreen}
                     />
                     <Tab.Screen 
                         name="ProfilePicture"
@@ -75,7 +90,7 @@ export default function Profile() {
                             tabBarIcon: () => 
                                 <FontAwesome5 size={30} name="camera" color="purple" />
                         }}
-                         component={UpdateProfileScreen} 
+                         component={CameraComponent} 
                     />
                     <Tab.Screen 
                         name="AddLocationScreen"
@@ -135,5 +150,12 @@ const styles = StyleSheet.create({
     },
     updateProfileText: { 
         fontSize: 26,
+    },
+    tabBarLabelStyle: { 
+        fontSize: 22,
+        color: 'black',
+    },
+    tabBarStyle: { 
+        backgroundColor: 'yellow',
     }
 });

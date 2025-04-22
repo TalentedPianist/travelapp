@@ -1,33 +1,60 @@
-import { createContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Redirect } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
 const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
+    const [isLoggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState({});
+    const navigation = useNavigation();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const login = async () => {
-        setIsLoggedIn(true);
-        await user();
-    };
-    const logout = async () => {
-        setIsLoggedIn(false);
+    const getUser = async () => {
+        const u = await AsyncStorage.getItem('user');
+        const parsed = JSON.parse(u);
+        return parsed;
+    }
+
+    const login = async (data) => {
         
+        try {
+             const user = await getUser();
+             if (!user || !user.password || !data.password) { 
+                console.log('Invalid user or missing password.');
+                return;
+             }
+
+            if (user.email === data.email && user.password === data.password) {
+                setLoggedIn(true);
+                setUser(user);
+                navigation.navigate('Profile');
+            } else { 
+                console.log('Invalid credentials');
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const logout = () => {
+      
+
     }
 
-    const user = async () => {
-        return await AsyncStorage.getItem('user');
-    }
-
-    useEffect(() => { 
-    }, [login,logout, isLoggedIn]);
+    useEffect(() => {
+        (async() => {
+            await AsyncStorage.getItem('user')
+                .then((result) => { 
+                    const parsed = JSON.parse(result);
+                    console.log(parsed);
+                }).catch((error) => console.log(error)); 
+        }); 
+    });
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout, user }}>
             {children}
         </AuthContext.Provider>
     );
-};
+}
 
-export { AuthProvider, AuthContext };
+export const useAuth = () => useContext(AuthContext);

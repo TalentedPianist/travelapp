@@ -5,6 +5,8 @@ import { TextInput, HelperText, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Crypto from 'expo-crypto';
+import { useAuth } from '../../../AuthContext';
+import { ActivityIndicator } from 'react-native-paper';
 
 const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -13,92 +15,69 @@ const DismissKeyboard = ({ children }) => (
 );
 
 export default function Register() {
-    const navigation = useNavigation(); // This was in the wrong place, causing a silent crash every time the button is clicked.
-
-    const getAllKeys = async () => {
-        let keys = [];
-        try {
-            keys = await AsyncStorage.getAllKeys();
-        } catch (e) {
-            console.log(e);
-        }
-        console.log(keys);
-    }
-
-    const getUser = async () => {
-        try {
-            let user = await AsyncStorage.getItem('user');
-            console.log(user);
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
-
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
+    const navigation = useNavigation();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { isLoggedIn, login } = useAuth();
 
     const handleRegister = async () => {
-
-        console.log('Register button clicked');
-        const validationErrors = validateForm(formData);
-        if (Object.keys(errors).length === 0) {
-            console.log('Submit button pressed');
-            const password = await Crypto.digestStringAsync(
-                Crypto.CryptoDigestAlgorithm.SHA256, formData.password); // Encrypt password using expo-crypto
-
-            let user = await AsyncStorage.getItem('user');
+        validateForm();
+        if (isFormValid) {
+            console.log('Submit button was clicked');
+            // Form is valid, perform the submission logic
             try {
-                if (user !== null) {
-                    alert("User already exists!");
-                } else {
-                    await AsyncStorage.setItem('user', JSON.stringify({ 'name': formData.name, 'email': formData.email, 'password': password }));
-                    alert('User registration successful!');
-                    navigation.navigate('Login');
-                }
-            } catch (error) {
-                console.error(error);
+                const securePassword = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, password); // Hash password using SHA256 with expo-crypto
+                await AsyncStorage.setItem('user', JSON.stringify({ 'name': name, 'email': email, 'password': securePassword })); // Add new user to AsyncStorage
+                setLoadingd(false);
+                alert('User successfully registered');
+                navigation.navigate('Login'); // Redirect to Profile screen
+                
+            } catch (e) {
+                console.log(e);
             }
 
         } else {
-            setErrors(validationErrors);
+            // Form is invalid, display error messages
+            console.log('Form contains errors');
         }
-
     };
 
-    const validateForm = (data) => {
+    const validateForm = () => {
         let errors = {};
-        if (!data.name || data.name.trim() === "") {
-            errors.name = "Name is required";
+
+        // Validate name field
+        if (!name) {
+            errors.name = 'Name is required';
         }
-        if (!data.email || data.email.trim() === "") {
-            errors.email = "Email is required";
-        } else if (!isValidEmail(data.email)) {
-            errors.email = "Invalid email format";
+
+        // Validate email field
+        if (!email) {
+            errors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            errors.email = 'Email is invalid';
         }
-        if (!data.password || data.password.trim() === "") {
-            errors.password = "Password is required";
+
+        // Validate password field
+        if (!password) {
+            errors.password = 'Password is required.';
+        } else if (password.length < 6) {
+            errors.password = 'Password must be at least 6 characters.';
         }
-        return errors;
+
+        // Set the errors and update form validity
+        setErrors(errors);
+        setIsFormValid(Object.keys(errors).length === 0);
     }
 
-    const isValidEmail = (email) => {
-        // basic email validation
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-
-    // https://static.enapter.com/rn/icons/material-community.html
-    // https://medium.com/@rutikpanchal121/building-a-robust-form-in-react-native-with-react-hook-form-and-zod-for-validation-7583678970c3
     return (
         <>
             <DismissKeyboard>
                 <View style={styles.containerStyles}>
-
+                    {loading && <ActivityIndicator size={large} animating={true} /> }
                     <Text style={styles.headerText}>Register</Text>
 
                     <TextInput
@@ -106,19 +85,19 @@ export default function Register() {
                         left={<TextInput.Icon icon="account" />}
                         style={styles.inputStyle}
                         name="name"
-                        onChangeText={(text) => setFormData({ ...formData, name: text })}
+                        onChangeText={setName}
                     />
-                    <View>{errors.name && <Text>{errors.name}</Text>}</View>
+                    {errors.name && <Text>{errors.name}</Text>}
 
                     <TextInput
                         label="Email"
                         left={<TextInput.Icon icon="email" />}
                         style={styles.inputStyle}
                         name="email"
-                        onChangeText={(text) => setFormData({ ...formData, email: text })}
+                        onChangeText={setEmail}
                         autoComplete="email"
                     />
-                    <View>{errors.email && <Text>{errors.email}</Text>}</View>
+                    {errors.email && <Text>{errors.email}</Text>}
 
                     <TextInput
                         label="Password"
@@ -126,9 +105,9 @@ export default function Register() {
                         style={styles.inputStyle}
                         secureTextEntry={true}
                         name="password"
-                        onChangeText={(text) => setFormData({ ...formData, password: text })}
+                        onChangeText={setPassword}
                     />
-                    <View>{errors.password && <Text>{errors.password}</Text>}</View>
+                    {errors.password && <Text>{errors.password}</Text>}
 
                     <TouchableOpacity style={styles.buttonStyle} onPress={handleRegister}>
                         <View><Text style={styles.textStyles}>Register</Text></View>
@@ -154,7 +133,7 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         width: '80%',
-        marginBottom: 30,
+
     },
     textStyles: {
         fontSize: 28,
@@ -169,7 +148,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignSelf: 'flex-start',
         marginBottom: 50,
-        marginTop: 20,
         paddingTop: 5,
         paddingBottom: 5,
         paddingLeft: 5,

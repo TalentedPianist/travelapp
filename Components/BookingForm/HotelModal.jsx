@@ -5,6 +5,7 @@ import { useState } from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { Redirect } from 'expo-router';
 
 export default function HotelModal(props) {
     const navigation = useNavigation();
@@ -17,12 +18,12 @@ export default function HotelModal(props) {
     const handleSave = async () => { 
        await AsyncStorage.setItem('hotel', JSON.stringify(props));
        alert('Hotel saved!');
-       toggleModal();
+       return <Redirect href="/Home" />;
     }
 
     return (
         <>
-            <Button onPress={toggleModal} title="View">View</Button>
+            <Button mode="contained"  onPress={toggleModal} title="View">View</Button>
             <View>
                 <Modal isVisible={isModalVisible} style={styles.modalStyle} hasBackdrop={false}>
                     <View style={{ flex: 1 }}>

@@ -1,14 +1,15 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, Image } from 'react';
 import { TouchableOpacity, StyleSheet, View, Button, Text, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import useAuthStore from './zustand/useAuthStore';
+import { useAuth } from './AuthContext';
+import ProfilePicture from './Components/User/ProfilePicture';
 
 const LoggedInModal = () => {
-    const logout = useAuthStore(state => state.logout);
-
+    const { user, logout, isLoggedIn } = useAuth();
+ 
     const navigation = useNavigation();
 
     const [isModalVisible, setModalVisible] = useState(false);
@@ -19,8 +20,7 @@ const LoggedInModal = () => {
 
     const handleLogout = () => {
         console.log('Logging out...');
-        logout(); // Logout user
-        navigation.navigate('Login');
+        logout();
     }
 
     function handleNavigate(name) { 
@@ -32,10 +32,11 @@ const LoggedInModal = () => {
         <>
             <View>
                 <Modal isVisible={isModalVisible}>
-                    <View style={{ flex: 1 }}>
+                    <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal}>
                             <MaterialCommunityIcons name="close" color="white" size={70} style={{ alignSelf: 'center' }} />
                         </TouchableOpacity>
+                        <ProfilePicture />
                         <TouchableOpacity onPress={() => handleNavigate('Profile')}>
                             <View>
                                 <Text style={styles.modalText}>Profile</Text>
@@ -73,7 +74,7 @@ const LoggedOutModal = () => {
     return (
         <>
             <Modal isVisible={isModalVisible}>
-                <View style={{ flex: 1 }}>
+                <View style={styles.modalContainer}>
                     <TouchableOpacity onPress={toggleModal}>
                         <MaterialCommunityIcons name="close" size={70} color="white" style={{ alignSelf: 'center' }} />
                     </TouchableOpacity>
@@ -109,7 +110,16 @@ const LoggedOutModal = () => {
 }
 
 export default function MyMenu() {
-    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+    const { user, logout, isLoggedIn } = useAuth();
+
+    useEffect(() => {
+        (async() => {
+            await AsyncStorage.getItem('user')
+                .then((result) => { 
+                    console.log(result);
+                }).catch((error) => console.log(error)); 
+        }); 
+    }, []);
 
     return (
         <>
@@ -128,15 +138,14 @@ export default function MyMenu() {
 
 const styles = StyleSheet.create({
     modalContainer: {
-        display: 'flex',
+
         flexDirection: 'column',
         flex: 1,
-        gap: 10,
+        flexGrow: 1,
         alignItems: 'center',
         alignSelf: 'center',
-        width: '90%',
         minHeight: '100%',
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        gap: 50,
     },
     modalText: {
         color: 'white',
