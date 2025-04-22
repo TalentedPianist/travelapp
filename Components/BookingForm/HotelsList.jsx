@@ -24,7 +24,8 @@ export default function HotelsList({ children }) {
     const noOfRoomsRef = useRef(0);
     const entityIdRef = useRef();
     const [hotelsList, setHotelsList] = useState([]);
-
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const submitRef = useRef();
 
@@ -63,12 +64,14 @@ export default function HotelsList({ children }) {
             const response = await axios.request(options);
             console.log(response);
             setHotelsList(response.data.results.hotelCards);
-         
+
         } catch (error) {
             console.error(error);
         }
 
     }
+
+
 
 
     // Syntax for NoOfRooms ref was messed up, causing hours of pain. Working now.
@@ -78,7 +81,7 @@ export default function HotelsList({ children }) {
 
             <FlatList
                 data={hotelsList}
-                ItemSeparatorComponent={() => { 
+                ItemSeparatorComponent={() => {
                     return (
                         <View>
                             <Divider style={{ color: 'black' }} />
@@ -126,12 +129,13 @@ export default function HotelsList({ children }) {
                                 </View>
                                 <View style={styles.secondRow}>
                                     <FromDate childToParent={(data) => { fromDateRef.current = data; }} />
+
                                     <ToDate childToParent={(data) => { toDateRef.current = data; }} />
 
                                 </View>
                                 <View style={styles.thirdRow}>
                                     <NoOfGuests childToParent={(data) => { noOfGuestsRef.current = data; }} />
-                                    <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} /> 
+                                    <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} />
                                 </View>
                                 <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
                                     <Text variant="headlineMedium" style={styles.searchText}>Search</Text>
@@ -207,7 +211,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
     },
     emptyContainer: {
-        
+
     },
     emptyText: {
         fontSize: 24,
@@ -267,7 +271,7 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 26,
     },
-    emptyTextStyle: { 
+    emptyTextStyle: {
         backgroundColor: 'lightgreen',
         fontSize: 26,
         paddingLeft: 20,
