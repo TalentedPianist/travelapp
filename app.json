@@ -18,9 +18,17 @@
             "CFBundleURLSchemes": [
               "com.googleusercontent.apps.100784437734-ed4u0lg903tpoh230793vsjb78pk4nr9"
             ]
+          },
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.100784437734-ed4u0lg903tpoh230793vsjb78pk4nr9"
+            ]
           }
         ],
-        "NSLocationWhenInUseDescription": "This app needs access to your location to show your current position." 
+        "NSLocationWhenInUseDescription": "This app needs access to your location to show your current position."
+      },
+      "runtimeVersion": {
+        "policy": "appVersion"
       }
     },
     "android": {
@@ -29,7 +37,13 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.douglas2.travelapp",
-      "permissions": ["ACCESS_FINE_LOCATION"]
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA"
+      ],
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -50,6 +64,9 @@
           "recordAudioAndroid": false
         }
       ]
-    ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/105e583f-b44d-4c4b-9405-2a0c949ed441"
+    }
   }
 }

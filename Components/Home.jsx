@@ -8,25 +8,18 @@ import { useNavigation } from '@react-navigation/native';
 export default function Home() {
 
    const [hotel, setHotel] = useState(false);
-   const navigation = useNavigation();
 
-   const hotelExists = useCallback(async () => {
-      let h = await AsyncStorage.getItem('hotel');
-      if (h) {
-         setHotel(JSON.parse(h));
-      }
-   });
-
-   useEffect(() => {
-
-      hotelExists();
-   }, []);
-
-   const handleDelete = async () => {
-      await AsyncStorage.removeItem('hotel');
-
+   async function getHotel() {
+      await AsyncStorage.getItem('hotel')
+         .then((result) => { 
+            const parsed = JSON.parse(result);
+            setHotel(parsed);
+         }).catch((error) => console.log(error)); 
    }
 
+   useEffect(() => {
+      getHotel(); 
+   }, []);
 
    return (
       <>

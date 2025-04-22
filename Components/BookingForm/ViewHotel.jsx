@@ -6,30 +6,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function ViewHotel() {
 
     const [hotel, setHotel] = useState(); // The issue was because of empty arrays in variable.  The variable is undefined.  Props need to be passed.
+    const [refresh, setRefresh] = useState(false);
     const navigation = useNavigation();
+
 
     async function hotelExists() {
         let h = await AsyncStorage.getItem('hotel');
         if (h) {
             setHotel(JSON.parse(h));
         }
-       
-    }
-    (async () => {
-        await hotelExists();
-    })();
 
-    const handleDelete = async () => {
-        await AsyncStorage.removeItem('hotel'); 
+    }
+   
+    const handleDelete = async ({ navigation }) => {
+        await AsyncStorage.removeItem('hotel');
+        setHotel({});
+        navigation.addListener('focus', () => { 
+            console.log('reloaded');
+        });
     }
 
+    useEffect(() => {
+        hotelExists();
+    }, [refresh]);
 
     // Question mark after hotel variable worked.
     return (
-        
+
         <View style={styles.hotelView}>
-         
-            <Text style={styles.hotelName}>{hotel?.name}</Text> 
+
+            <Text style={styles.hotelName}>{hotel?.name}</Text>
             <Image style={styles.hotelImage} source={{ uri: hotel?.image }} />
             <Text style={styles.distanceText}>{hotel?.distance}</Text>
             <Text style={styles.priceText}>{hotel?.price}</Text>
@@ -37,7 +43,7 @@ export default function ViewHotel() {
                 <Text style={styles.deleteText}>Delete</Text>
             </TouchableOpacity>
         </View>
-    
+
     );
 }
 

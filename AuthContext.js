@@ -36,8 +36,8 @@ export const AuthProvider = ({ children }) => {
         }
     }
     const logout = () => {
-      
-
+      setLoggedIn(false);
+      navigation.navigate('Login');
     }
 
     useEffect(() => {

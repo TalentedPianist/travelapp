@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
         paddingRight: 20,
     },
     textStyle: { 
-        fontSize: 28,
+        fontSize: 24,
     }
 });

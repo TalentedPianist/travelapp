@@ -1,6 +1,6 @@
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Text, Divider, ActivityIndicator } from 'react-native-paper';
+import { Text, Divider, ActivityIndicator, Button } from 'react-native-paper';
 import HotelModal from './HotelModal';
 import { useNavigation } from '@react-navigation/native';
 import BookingFormComponent from './BookingFormComponent';
@@ -26,54 +26,71 @@ export default function HotelsList({ children }) {
     const [hotelsList, setHotelsList] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
     const [errors, setErrors] = useState({});
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
-    const submitRef = useRef();
+    const validateForm = () => {
+        let errors = {};
 
-    const childToParent = useCallback((data) => {
-        // Memoized to prevent unnecessary re-renders
-
-    }, []);
-
-
-
-    const handleSubmit = async () => {
-
-        const fromDate = fromDateRef.current.fromDate;
-        const toDate = toDateRef.current.toDate;
-        console.log(toDate);
-        const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-        const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-        const id = cityRef.current.id;
-
-        const options = {
-            method: 'GET',
-            url: 'https://skyscanner89.p.rapidapi.com/hotels/list',
-            params: {
-                entity_id: id,
-                checkin: formattedFromDate,
-                checkout: formattedToDate,
-                adults: 1,
-            },
-            headers: {
-                'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
-                'x-rapidapi-host': 'skyscanner89.p.rapidapi.com'
-            }
-        };
-
-        try {
-            setLoading(true);
-            const response = await axios.request(options);
-            setLoading(false);
-            console.log(response);
-            setHotelsList(response.data.results.hotelCards);
-
-        } catch (error) {
-            console.error(error);
+        // Validate city field
+        if (!cityRef.current.id) {
+            errors.city = "City is required.";
+        }
+        // Validate checkin field
+        if (!fromDateRef.current) {
+            errors.fromDate = "Checkin is required";
+        }
+        // Validate checkout field
+        if (!toDateRef.current) {
+            errors.toDate = "Checkout is required";
         }
 
+        // Set the errors and update form validity
+        setErrors(errors);
+        setIsFormValid(Object.keys(errors).length === 0);
+    };
+
+    const handleSubmit = async () => {
+        setHasSubmitted(true);
+        validateForm();
+        if (hasSubmitted) {
+
+            const fromDate = fromDateRef.current.fromDate;
+            const toDate = toDateRef.current.toDate;
+            console.log(toDate);
+
+            const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+            const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+            const id = cityRef.current.id;
+
+            const options = {
+                method: 'GET',
+                url: 'https://skyscanner89.p.rapidapi.com/hotels/list',
+                params: {
+                    entity_id: id,
+                    checkin: formattedFromDate,
+                    checkout: formattedToDate,
+                    adults: 1,
+                },
+                headers: {
+                    'x-rapidapi-key': '23da1d3f7amshb4f9b46ad4fbdf7p1528f2jsn716390f369ba',
+                    'x-rapidapi-host': 'skyscanner89.p.rapidapi.com'
+                }
+            };
+
+            try {
+                setLoading(true);
+                const response = await axios.request(options);
+                setLoading(false);
+                //console.log(response);
+                setHotelsList(response.data.results.hotelCards);
+
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            console.log('Errors have occurred.  Please fix them.');
+        }
     }
-
-
 
 
     // Syntax for NoOfRooms ref was messed up, causing hours of pain. Working now.
@@ -111,12 +128,15 @@ export default function HotelsList({ children }) {
 
                             </View>
                         </View>
+
                     )
                 }}
                 ListFooterComponent={() => {
                     return (
                         <>
+
                             <View style={styles.container}>
+
                                 {loading && <ActivityIndicator animated={true} size="large" />}
 
                                 <View>
@@ -127,13 +147,13 @@ export default function HotelsList({ children }) {
 
                                 <View style={styles.firstRow}>
                                     <City childToParent={(data) => { cityRef.current = data; }} />
-
+                                    {hasSubmitted && errors.city && <Text>{errors.city}</Text>}
                                 </View>
                                 <View style={styles.secondRow}>
                                     <FromDate childToParent={(data) => { fromDateRef.current = data; }} />
-
+                                    {hasSubmitted && errors.fromDate && <Text>{errors.fromDate}</Text>}
                                     <ToDate childToParent={(data) => { toDateRef.current = data; }} />
-
+                                    {hasSubmitted && errors.toDate && <Text>{errors.toDate}</Text>}
                                 </View>
                                 <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
                                     <Text variant="headlineMedium" style={styles.searchText}>Search</Text>
@@ -142,6 +162,7 @@ export default function HotelsList({ children }) {
                         </>
                     );
                 }}
+                extraData={{}}
             />
 
         </>
@@ -155,6 +176,7 @@ const styles = StyleSheet.create({
         flex: 0,
         flexGrow: 0,
         backgroundColor: 'lightgreen',
+        justifyContent: 'center',
         height: '100%',
         minHeight: '100%',
         paddingLeft: 20,
@@ -226,11 +248,11 @@ const styles = StyleSheet.create({
     },
     secondRow: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         flex: 0,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
+        width: '40%',
         gap: 20,
         marginBottom: 20,
     },
@@ -268,9 +290,6 @@ const styles = StyleSheet.create({
     searchText: {
         fontSize: 20,
     },
-    headerText: {
-        fontSize: 26,
-    },
     emptyTextStyle: {
         backgroundColor: 'lightgreen',
         fontSize: 26,
@@ -283,4 +302,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     }
-})
+});

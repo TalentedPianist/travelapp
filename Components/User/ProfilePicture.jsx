@@ -17,22 +17,25 @@ export default function ProfilePicture() {
         getProfilePic();
     }, []);
 
-    return (
-        <View>
-            <Image
-                style={styles.profilePicture}
-                source={{
-                    uri: picture
-                }}
-            />
-        </View>
-    );
+        return (
+            <View>
+
+                <Image
+                    style={styles.profilePicture}
+                    source={{
+                        uri: picture
+                    }}
+                />
+
+            </View>
+        );
+    
 }
 
 const styles = StyleSheet.create({
     profilePicture: {
         width: 200,
         height: 200,
-        
+
     }
 });

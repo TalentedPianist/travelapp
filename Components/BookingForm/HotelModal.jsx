@@ -19,6 +19,7 @@ export default function HotelModal(props) {
        await AsyncStorage.setItem('hotel', JSON.stringify(props));
        alert('Hotel saved!');
        toggleModal();
+        props.clear();
     }
 
     return (

@@ -15,7 +15,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { AuthProvider, useAuth } from './AuthContext';
 
-function HomeScreen() {
+function HomeScreen({ navigation}) {
+    useEffect(() => { 
+        navigation.addListener('focus', () => { 
+            console.log('reloaded');
+        }, [navigation]);
+    }, []);
+
     return (
 
         <Home />

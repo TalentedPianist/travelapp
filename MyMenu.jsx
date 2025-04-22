@@ -31,7 +31,7 @@ const LoggedInModal = () => {
     return (
         <>
             <View>
-                <Modal isVisible={isModalVisible} coverScreen={false} backdropOpacity={0.70}>
+                <Modal isVisible={isModalVisible}>
                     <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal}>
                             <MaterialCommunityIcons name="close" color="white" size={70} style={{ alignSelf: 'center' }} />
@@ -139,14 +139,14 @@ export default function MyMenu() {
 
 const styles = StyleSheet.create({
     modalContainer: {
-
+        width:'100%',
         flexDirection: 'column',
         flex: 1,
         flexGrow: 1,
         alignItems: 'center',
         alignSelf: 'center',
         minHeight: '100%',
-        gap: 50,
+        gap: 20,
     },
     modalText: {
         color: 'white',

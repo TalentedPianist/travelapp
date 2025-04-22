@@ -47,9 +47,6 @@ function City({ childToParent }) {
         }
     }, []);
 
-    useEffect(() => {
-
-    }, []);
 
     // Mention the render issue in the report.  If you have a View element around external components they won't render.
     return (

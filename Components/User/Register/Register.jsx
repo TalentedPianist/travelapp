@@ -32,7 +32,7 @@ export default function Register() {
             try {
                 const securePassword = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, password); // Hash password using SHA256 with expo-crypto
                 await AsyncStorage.setItem('user', JSON.stringify({ 'name': name, 'email': email, 'password': securePassword })); // Add new user to AsyncStorage
-                setLoadingd(false);
+                setLoading(false);
                 alert('User successfully registered');
                 navigation.navigate('Login'); // Redirect to Profile screen
                 
