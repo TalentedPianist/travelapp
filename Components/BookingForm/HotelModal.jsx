@@ -18,7 +18,7 @@ export default function HotelModal(props) {
     const handleSave = async () => { 
        await AsyncStorage.setItem('hotel', JSON.stringify(props));
        alert('Hotel saved!');
-       return <Redirect href="/Home" />;
+       toggleModal();
     }
 
     return (

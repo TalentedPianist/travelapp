@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useState, useEffect, useContext, Image } from 'react';
+import { useState, useEffect, useContext, Image, Platform } from 'react';
 import { TouchableOpacity, StyleSheet, View, Button, Text, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -31,7 +31,7 @@ const LoggedInModal = () => {
     return (
         <>
             <View>
-                <Modal isVisible={isModalVisible}>
+                <Modal isVisible={isModalVisible} coverScreen={false} backdropOpacity={0.70}>
                     <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal}>
                             <MaterialCommunityIcons name="close" color="white" size={70} style={{ alignSelf: 'center' }} />
@@ -73,7 +73,8 @@ const LoggedOutModal = () => {
 
     return (
         <>
-            <Modal isVisible={isModalVisible}>
+            <Modal isVisible={isModalVisible} animationIn="slideInUp">
+
                 <View style={styles.modalContainer}>
                     <TouchableOpacity onPress={toggleModal}>
                         <MaterialCommunityIcons name="close" size={70} color="white" style={{ alignSelf: 'center' }} />
@@ -170,6 +171,12 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingRight: 10,
         marginTop: 20,
+    },
+    menuIcon: { 
+        paddingLeft: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingRight: 10,
     }
 });
 

@@ -11,11 +11,6 @@ function FromDate({ childToParent }) {
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
-    // const onChange = useCallback((event, value) => { 
-    //     setSelectedDate(value);
-    //     childToParent({ component: 'FromDate', fromDate: value });
-    // }, []);
-
     const onChange = (event, selectedDate) => { 
         const currentDate = selectedDate;
         setShow(false);
@@ -46,6 +41,7 @@ function FromDate({ childToParent }) {
         <View style={styles.containerStyle}>
           { Platform.OS === 'ios' ? 
           <>
+              
                 <Text style={{ paddingLeft: 10, paddingBottom: 10, fontWeight: 'bold' }}>Checkin Date:</Text>
                 <DateTimePicker 
                     testID="dateTimePicker"
@@ -53,8 +49,9 @@ function FromDate({ childToParent }) {
                     mode={mode}
                     is24Hour={true}
                     onChange={onChange}
+                    style={{ backgroundColor: 'orange' }}
                 />
-            
+                
           </>
           : 
             <TextInput 
@@ -63,7 +60,7 @@ function FromDate({ childToParent }) {
                 style={styles.textInput}
                 onPress={showDatepicker}
                 onFocus={showDatepicker}
-                value={selectedDate ? selectedDate.toLocaleDateString() : 'No date selected'}
+                value={date ? date.toLocaleDateString() : 'No date selected'}
             /> 
           }
         </View>

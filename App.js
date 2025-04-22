@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MyMenu from './MyMenu';
-import { useRef, useEffect, useContext, createContext } from 'react';
+import { useRef, useEffect, useContext, createContext, useCallback, useState } from 'react';
 import AboutUs from './Components/AboutUs';
 import Login from './Components/User/Login/Login';
 import Home from './Components/Home';
@@ -128,11 +128,14 @@ export default function App() {
     const navigationRef = useRef();
     const isReadyRef = useRef(false); // Sets navigation to ready otherwise we get an error
 
-
     useEffect(() => {
         //clearAll();
         getAllKeys();
+
+       
     }, []);
+
+    
 
     return (
         <>

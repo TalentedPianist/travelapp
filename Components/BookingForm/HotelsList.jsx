@@ -61,7 +61,9 @@ export default function HotelsList({ children }) {
         };
 
         try {
+            setLoading(true);
             const response = await axios.request(options);
+            setLoading(false);
             console.log(response);
             setHotelsList(response.data.results.hotelCards);
 
@@ -133,10 +135,6 @@ export default function HotelsList({ children }) {
                                     <ToDate childToParent={(data) => { toDateRef.current = data; }} />
 
                                 </View>
-                                <View style={styles.thirdRow}>
-                                    <NoOfGuests childToParent={(data) => { noOfGuestsRef.current = data; }} />
-                                    <NoOfRooms childToParent={(data) => { noOfRoomsRef.current = data; }} />
-                                </View>
                                 <TouchableOpacity onPress={handleSubmit} style={styles.searchButton}>
                                     <Text variant="headlineMedium" style={styles.searchText}>Search</Text>
                                 </TouchableOpacity>
@@ -159,6 +157,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgreen',
         height: '100%',
         minHeight: '100%',
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     hotelsList: {
         backgroundColor: 'lightgreen',
@@ -228,10 +228,10 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         flex: 0,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
         width: '100%',
-        gap: 50,
+        gap: 20,
         marginBottom: 20,
     },
     thirdRow: {

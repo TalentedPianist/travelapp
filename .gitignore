@@ -76,3 +76,8 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+
+# Android folder
+/android
+#ios folder
+/ios
