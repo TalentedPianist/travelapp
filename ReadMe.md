@@ -17,6 +17,6 @@
         For Expo Go, you should see the web page illustrated on the right.
     </article>
     <article>
-        ![ScreenShot](images/expo-link.png)
+        <img src="https://github.com/TalentedPianist/travelapp/blob/main/images/expo-link.png?raw=true">
     </article>
 </section>
