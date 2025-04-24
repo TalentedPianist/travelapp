@@ -17,6 +17,6 @@
         For Expo Go, you should see the web page illustrated on the right.
     </article>
     <article>
-        ![Alt text](images/expo-link.png)
+        ![ScreenShot](images/expo-link.png)
     </article>
 </section>
