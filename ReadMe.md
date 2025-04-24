@@ -21,11 +21,13 @@
         width: 20%;
     }
 
-    o { 
+    div { 
         background-color: 'orange';
+        min-height: 100%;
     }
 </style>
 
+<div>
 
 <h1>My Travel App</h1>
 
@@ -45,6 +47,8 @@
         For Expo Go, you should see the web page illustrated on the right.
     </article>
     <article>
-        ![alt text](images/expo-link.png)
+        <img src="https://github.com/TalentedPianist/travelapp/blob/main/images/expo-link.png?raw=true">
     </article>
 </section>
+
+</div>
