@@ -1,19 +1,31 @@
 
 <style>
+    h1 { 
+        background-color: 'orange';
+    }
+    
     section { 
         display: flex;
         flex-direction: row;
         flex: 1;
+        align-items: center;
+        width: '100%';
     }
 
     article { 
         width: 50%;
+        
     }
 
     img { 
         width: 20%;
     }
+
+    o { 
+        background-color: 'orange';
+    }
 </style>
+
 
 <h1>My Travel App</h1>
 
@@ -33,6 +45,6 @@
         For Expo Go, you should see the web page illustrated on the right.
     </article>
     <article>
-        <img src="https://github.com/TalentedPianist/travelapp/blob/main/images/expo-link.png?raw=true">
+        ![alt text](images/expo-link.png)
     </article>
 </section>
