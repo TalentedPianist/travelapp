@@ -1,4 +1,20 @@
 
+<style>
+    section { 
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+    }
+
+    article { 
+        width: 50%;
+    }
+
+    img { 
+        width: 20%;
+    }
+</style>
+
 <h1>My Travel App</h1>
 
 <p>This repository contains a travel app that was created as part of my course at University of the West of Scotland.  To install the app on your device, please follow these steps:</p>
