@@ -1,15 +1,16 @@
 
 <style>
-    h1 { 
-        background-color: 'orange';
+    p { 
+        font-size: large;
     }
     
     section { 
         display: flex;
         flex-direction: row;
         flex: 1;
-        align-items: center;
+        align-items: flex-start;
         width: '100%';
+        gap: 2em;
     }
 
     article { 
@@ -18,12 +19,36 @@
     }
 
     img { 
-        width: 20%;
+        width: 100%;
+        vertical-align: top;
     }
 
     div { 
-        background-color: 'orange';
+        background-color: orange;
         min-height: 100%;
+        padding-left: 1%;
+        padding-right: 1%;
+        padding-top: 1%;
+        padding-bottom: 1%;
+    }
+
+    .homepage ol { 
+        display: flex; 
+        flex-direction: row;
+        flex: 1;
+        align-items: flex-start;
+        gap: 2em;
+    }
+
+    .homepage li { 
+        align-self: flex-start;
+    }
+
+    .aboutpage { 
+        gap: 2em;
+    }
+    .registerpage { 
+        gap: 2em;
     }
 </style>
 
@@ -44,11 +69,61 @@
 
 <section>
     <article>
-        For Expo Go, you should see the web page illustrated on the right.
+        <p>For Expo Go, you should see the web page illustrated on the right.</p>
     </article>
     <article>
-        <img src="https://github.com/TalentedPianist/travelapp/blob/main/images/expo-link.png?raw=true">
+        <img src="images/expo-link.png">
     </article>
 </section>
+
+<section>
+    <p>Now you will find more detailed instructions of how to use the app below.</p>
+</section>
+
+<hr>
+<h3>Home Page</h3>
+<section class="homepage">
+    <div>
+        <ol>
+        <li><a href="images/search-form-dropdownlist-screenshot.png" target="_blank"><img src="images/search-form-dropdownlist-screenshot.png"></a></li>
+        <li><a href="images/hotels-list-screenshot.png"><img src="images/hotels-list-screenshot.png"></a></li>
+        <li><a href="images/hotel-modal-popup-screenshot.png" target="_blank"><img src="images/hotel-modal-popup-screenshot.png"></a></li>
+        <li><a href="images/home-page-after-saved-hotel.png" target="_blank"><img src="images/home-page-after-saved-hotel.png"></a>
+        </ol></li>
+    </div>
+</section>
+
+<hr>
+<h3>About Us</h3>
+<section class="aboutpage">
+    <article>
+        <img src="images/about-us-page.png">
+    </article>
+    <article>
+        <p>The about us page is very generic, with lots of room for improvement.  It simply contains lorem ipsum generated text inside a scroll view.  It should be remembered that this app is a school project and will not necessarily be published.</p>
+    </article>
+</section>
+
+<section class="registerpage">
+    <article>
+        <p>The register page attempts to improve the user interface design ever so slightly by adding icons to the input fields.  It is a standard registration page that validates user input and creates a new user account.  It should be noted that mobile development is very different to web development, so only one user can be created.</p>
+    </article>
+    <article>
+        <img src="images/register-page.png">
+    </article>
+
+</section>
+
+<hr>
+<h1>Login Page</h1>
+<section class="login-page">
+    <article>
+        <img src="images/login-screenshot.png">
+    </article>
+    <article>
+        <p>Again, the login page has a very basic user interface with a simple login form to enter your email address and password.  The interface could be vastly improved by adding a link to reset your password.</p>
+    </article>
+</section>
+
 
 </div>
