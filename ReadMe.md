@@ -71,3 +71,47 @@
         <td><img src="images/profile-home.png"></td>
     </tr>
 </table>
+
+# Update Profile
+
+<table>
+    <tr>
+        <td><img src="images/update-profile.png"></td>
+        <td><p>The update profile screen demonstrates update functionality of CRUD operations.  It consists of really basic input fields to update your name and email address.  Attempts to improve the user interface experience have been added by clearing the field when the user touches it.</p></p></td>
+    </tr>
+</table>
+
+# Profile Picture 
+
+<table>
+    <tr>
+        <td><img src="images/camera-screenshot-1.png"></td>
+        <td><img src="images/camera-screenshot-2.png"></td>
+        <td><img src="images/camera-screenshot-3.png"></td>
+    </tr>
+    <tr>
+        <td><img src="images/camera-screenshot-4.png"></td>
+        <td><img src="images/camera-screenshot-5.png"></td>
+        <td><img src="images/camera-screenshot-6.png"><td>
+    </tr>
+</table>
+
+# Add Location
+
+<table>
+    <tr>
+        <td><img src="images/location-screenshot-1.png"></td>
+        <td><img src="images/location-screenshot-2.png"></td>
+        <td><img src="images/location-screenshot-3.png"></td>
+    </tr>
+</table>
+
+# Delete Profile
+
+<table>
+    <tr>
+        <td><img src="images/delete-profile-1.png"></td>
+        <td><img src="images/delete-profile-2.png"></td>
+        <td><img src="images/delete-profile-3.png"></td>
+    </tr>
+</table>
