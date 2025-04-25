@@ -30,7 +30,7 @@
 
 <table>
     <tr>
-        <td><img src="images/about-us-page.png"></td>
+        <td><img src="https://github.com/TalentedPianist/travelapp/blob/main/images/about-us-page.PNG?raw=true"></td>
         <td>The about us page is very generic, with lots of room for improvement.  It simply contains lorem ipsum generated text inside a scroll view.  It should be remembered that this app is a school project and will not necessarily be published.</td>
     </tr>
 </table>
@@ -40,7 +40,7 @@
 <table>
     <tr>
         <td>The register page attempts to improve the user interface design ever so slightly by adding icons to the input fields.  It is a standard registration page that validates user input and creates a new user account.  It should be noted that mobile development is very different to web development, so only one user can be created.</td>
-        <td><img src="images/register-page.png"></td>
+        <td><img src="https://github.com/TalentedPianist/travelapp/blob/main/images/register-page.PNG?raw=true"></td>
     </tr>
 </table>
 
@@ -48,7 +48,7 @@
 
 <table>
     <tr>
-        <td><img src="images/login-screenshot.png"></td>
+        <td><img src="https://github.com/TalentedPianist/travelapp/blob/main/images/login-screenshot.PNG?raw=true"></td>
         <td>Again, the login page has a very basic user interface with a simple login form to enter your email address and password.  The interface could be vastly improved by adding a link to reset your password.</td>
     </tr>
 </table>
