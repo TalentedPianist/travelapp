@@ -53,3 +53,21 @@
     </tr>
 </table>
 
+# Profile Page
+
+<table>
+    <tr>
+        <td>   <p>After the user successfully logs in, they will be redirected to ther profile page.  This demonstrates basic read functionality in the application.  It could be made more engaging to improve it, but time has been a big constraint for this project.</p>
+        <p>Navigation tabs have been created at the bottom to navigate around the profile section.  This is popular on mobile apps, notably the Facebook mobile app has this UI design.</p>
+        <p>The navigation tabs are:</p>
+        <ul>
+            <li>Profile</li>
+            <li>Update Profile</li>
+            <li>Profile Picture</li>
+            <li>Add Location</li>
+            <li>Delete Profile</li>
+        </ul>
+        </td>
+        <td><img src="images/profile-home.png"></td>
+    </tr>
+</table>
