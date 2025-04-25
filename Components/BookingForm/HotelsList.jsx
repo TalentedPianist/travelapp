@@ -134,16 +134,12 @@ export default function HotelsList({ children }) {
                 ListFooterComponent={() => {
                     return (
                         <>
-
                             <View style={styles.container}>
-
                                 {loading && <ActivityIndicator animated={true} size="large" />}
 
                                 <View>
                                     <Text variant="headlineMedium">Find a Hotel</Text>
                                 </View>
-
-
 
                                 <View style={styles.firstRow}>
                                     <City childToParent={(data) => { cityRef.current = data; }} />
@@ -248,11 +244,11 @@ const styles = StyleSheet.create({
     },
     secondRow: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         flex: 0,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '40%',
+
         gap: 20,
         marginBottom: 20,
     },

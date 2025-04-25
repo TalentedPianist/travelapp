@@ -1,9 +1,10 @@
 import * as Location from 'expo-location';
 import { useState, useEffect, useRef } from 'react';
-import { View, StatusBar, FlatList, Text, Button, ActivityIndicator, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StatusBar, FlatList, Text, ActivityIndicator, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import MapView, { Marker } from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-paper';
 
 // Geolocation tutorial - https://snack.expo.dev/@psalva/dwt---todo-storage-and-geolocation
 
@@ -74,7 +75,7 @@ export default function LocationComponent() {
     } else { 
         return (
             <View>
-                <Button title="Get Location" onPress={fetchLocation} />
+                <Button style={styles.button} mode="contained" title="Get Location" onPress={fetchLocation} />
             </View>
         );
     }

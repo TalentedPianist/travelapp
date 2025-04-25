@@ -105,7 +105,7 @@ return (
 
                         {errors.password && <Text>{errors.password}</Text>}
 
-                        <Button style={styles.buttonStyle} mode="contained" textColor="black" buttonColor="yellow" onPress={handleLogin}>Login</Button>
+                        <Button style={styles.buttonStyle} mode="contained" textColor="black" buttonColor="yellow" onTouchStart={handleLogin}>Login</Button>
                     </View>
                 </>
             )}

@@ -1,7 +1,7 @@
 
 <style>
     p { 
-        font-size: large;
+        font-size: x-large;
     }
     
     section { 
@@ -10,7 +10,7 @@
         flex: 1;
         align-items: flex-start;
         width: '100%';
-        gap: 2em;
+        justify-content: space-evenly;
     }
 
     article { 
@@ -32,6 +32,15 @@
         padding-bottom: 1%;
     }
 
+    li { 
+        font-size: x-large;
+    }
+
+    .ol { 
+        display: flex;
+        flex-direction: row;
+    }
+
     .homepage ol { 
         display: flex; 
         flex-direction: row;
@@ -50,7 +59,58 @@
     .registerpage { 
         gap: 2em;
     }
-</style>
+
+    .profilepicture { 
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 100%;
+        justify-content: space-evenly;
+    }
+
+    .profilepicture ol { 
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        justify-content: space-evenly;
+        min-width: 100%;
+        gap: 5em;
+    }
+
+    .location { 
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 100%;
+        justify-content: space-evenly;
+    }
+
+    .location ol { 
+        display: flex; 
+        flex-direction: row; 
+        flex: 1; 
+        justify-content: space-evenly;
+        min-width: 100%;
+        gap: 5em;
+    }
+
+    .delete { 
+        display: flex; 
+        flex-direction: column;
+        flex: 1; 
+        width: 100%;
+        
+    }
+
+    .delete ol { 
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        justify-content: space-evenly;
+        min-width: 100%;
+        gap: 5em;
+    }
+    </style>
 
 <div>
 
@@ -123,6 +183,78 @@
     <article>
         <p>Again, the login page has a very basic user interface with a simple login form to enter your email address and password.  The interface could be vastly improved by adding a link to reset your password.</p>
     </article>
+</section>
+
+
+<h1>Profile Page</h1>
+<section class="profile-page">
+    <article>
+        <p>After the user successfully logs in, they will be redirected to ther profile page.  This demonstrates basic read functionality in the application.  It could be made more engaging to improve it, but time has been a big constraint for this project.</p>
+        <p>Navigation tabs have been created at the bottom to navigate around the profile section.  This is popular on mobile apps, notably the Facebook mobile app has this UI design.</p>
+        <p>The navigation tabs are:</p>
+        <ul>
+            <li>Profile</li>
+            <li>Update Profile</li>
+            <li>Profile Picture</li>
+            <li>Add Location</li>
+            <li>Delete Profile</li>
+        </ul>
+        <p>This guide will now go on to describe the Update Profile screen.</p>
+    </article>
+   <article>
+        <img src="images/profile-home.png">
+    </article>
+</section>
+
+
+<h1>Update Profile</h1>
+<section>
+    <article>
+        <img src="images/update-profile.png">
+    </article>
+    <article>
+        <p>The update profile screen demonstrates update functionality of CRUD operations.  It consists of really basic input fields to update your name and email address.  Attempts to improve the user interface experience have been added by clearing the field when the user touches it.</p>
+    </article>
+</section>
+
+<hr>
+<h1>Profile Picture</h1>
+ <section class="profilepicture">
+    <div>
+    <ol>
+        <li><a href="images/camera-screenshot-1.png"><img src="images/camera-screenshot-1.png"></a></li>
+        <li><a href="images/camera-screenshot-2.png"><img src="images/camera-screenshot-2.png"></a></li>
+        <li><a href="images/camera-screenshot-3.png"><img src="images/camera-screenshot-3.png"></a></li>
+    </ol>
+    </div>
+    <div>
+        <ol start="4">
+            <li><a href="images/camera-screenshot-4.png"><img src="images/camera-screenshot-4.png"></a></li>
+            <li><a href="images/camera-screenshot-5.png"><img src="images/camera-screenshot-5.png"></a></li>
+            <li><a href="images/camera-screenshot-6.png"><img src="images/camera-screenshot-6.png"></a></li>
+        </ol>
+    </div>
+</section>
+
+<h1>Add Location</h1>
+<section class="location">
+    <div>
+        <ol>
+            <li><a href="images/location-screenshot-1.png"><img src="images/location-screenshot-1.png"></a></li>
+            <li><a href="images/location-screenshot-2.png"><img src="images/location-screenshot-2.png"></a></li>
+            <li><a href="images/location-screenshot-3.png"><img src="images/location-screenshot-3.png"></a></li>
+        </ol>
+    </div>
+</section>
+
+<h1>Delete Profile</h1>
+<section class="delete">
+        <ol>
+            <li><a href="images/delete-profile-1.png"><img src="images/delete-profile-1.png"></a></li>
+            <li><a href="images/delete-profile-2.png"><img src="images/delete-profile-2.png"></a></li>
+            <li><a href="images/delete-profile-3.png"><img src="images/delete-profile-3.png"></a></li>
+        </ol>
+    
 </section>
 
 
